@@ -1,3 +1,4 @@
+.idea/
 node_modules/
 .expo/
 dist/
@@ -12,3 +13,4 @@ web-build/
 
 # macOS
 .DS_Store
+package-lock.json
