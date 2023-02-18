@@ -1,11 +1,15 @@
 import {Fragment} from "react";
 import {StyleSheet, View} from "react-native";
 import {Button} from "@rneui/themed";
+import AuthNavigation from "../../../../../navigation/Auth";
 
-const ClientAction = () => {
+const ClientAction = ({
+                          navigation
+                      }: any) => {
     return <Fragment>
         <View style={styles.buttonContainer}>
-            <Button size="md" color='error' style={styles.button}>
+            <Button size="md" color='error' style={styles.button}
+                    onPress={() => navigation.navigate(AuthNavigation.Login.name, {name: AuthNavigation.Login.name})}>
                 Logout
             </Button>
         </View>

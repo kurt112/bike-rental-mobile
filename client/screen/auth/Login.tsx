@@ -58,11 +58,22 @@ const Login = ({
             }
 
             setError('');
+
+            setCred({
+                username: '',
+                password: ''
+            })
         }).catch(error => {
             const {data} = error.response;
 
             setError(data.message);
+
+            alert(data.message);
+        }).finally(() => {
+
         })
+
+
     }
 
 

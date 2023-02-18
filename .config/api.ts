@@ -1,4 +1,6 @@
 import axios from "axios";
+
+// use node v16.19.0 or latest
     // https://bike-rental.herokuapp.com/
 // http://192.168.100.19:5000
 export const host_url = process.env.NODE_ENV === 'development'? 'https://bike-rental.herokuapp.com':'https://bike-rental.herokuapp.com';

@@ -7,7 +7,9 @@ import {CustomerCreate} from "../../../../../.types/customer";
 import {getCustomerData} from "../../../../../.api/customer-api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const CustomerProfile = () => {
+const CustomerProfile = ({
+                             navigation
+                         }: any) => {
 
     const [index,setIndex] = useState<number>(0);
     const [isEdit,setIsEdit] = useState<boolean>(false);
@@ -78,12 +80,17 @@ const CustomerProfile = () => {
                 <Tab.Item
                     title="Personal Info"
                     titleStyle={{fontSize: 14}}
-                    icon={{name: 'map', type: 'ionicon', color: 'white'}}
+                    icon={{name: 'help-circle-outline', type: 'ionicon', color: 'white'}}
                 />
                 <Tab.Item
                     title="Actions"
                     titleStyle={{fontSize: 14}}
-                    icon={{name: 'map', type: 'ionicon', color: 'white'}}
+                    icon={{name: 'hammer-outline', type: 'ionicon', color: 'white'}}
+                />
+                <Tab.Item
+                    title="Notifications"
+                    titleStyle={{fontSize: 14}}
+                    icon={{name: 'notifications-circle-outline', type: 'ionicon', color: 'white'}}
                 />
                 {/*<Tab.Item*/}
                 {/*    title="Profile"*/}
@@ -99,7 +106,7 @@ const CustomerProfile = () => {
             </Tab>
 
             {
-                index === 0?<UserData isEdit={isEdit} user={customer.user} setCustomer={setCustomer}/>: <ClientAction/>
+                index === 0?<UserData isEdit={isEdit} user={customer.user} setCustomer={setCustomer} navigation={navigation}/>: <ClientAction navigation={navigation}/>
             }
 
         </View>

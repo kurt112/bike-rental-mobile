@@ -4,9 +4,11 @@ import {BikeObject} from "../../../../../.types/bike";
 import {Button, Card} from "@rneui/themed";
 import ScrollView = Animated.ScrollView;
 import {getBikeAvailable} from "../../../../../.api/bike-api";
-import {useIsFocused} from "@react-navigation/native";
+import BikeNavigation from "../../../../../navigation/Bike";
 
-const BikeAvailable = () => {
+const BikeAvailable = ({
+                           navigation
+                       }: any) => {
 
     const [bikes, setBikes] = useState<BikeObject[]>([])
     const [page, setPage] = useState(1);
@@ -65,6 +67,7 @@ const BikeAvailable = () => {
                                         marginRight: 0,
                                         marginBottom: 0,
                                     }}
+                                    onPress={ () => navigation.navigate(BikeNavigation.Request.name, {name: BikeNavigation.Request.name})}
                                     title="Request Now"
                                 />
                             </Card>

@@ -7,13 +7,15 @@ interface props {
     user: UserCreate | undefined,
     setCustomer: any,
     isEdit: boolean
+    navigation: any
 }
 
 const UserData = (
     {
         user,
         setCustomer,
-        isEdit
+        isEdit,
+        navigation
     }: props
 ) => {
     return (
@@ -97,7 +99,8 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingLeft: 20,
         paddingRight: 20,
-        marginBottom: 5
+        marginBottom: 5,
+        backgroundColor: 'white'
     },
     dataTitle: {
         fontWeight: 'bold',
