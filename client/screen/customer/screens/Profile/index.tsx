@@ -6,15 +6,16 @@ import ClientAction from "./action";
 import {CustomerCreate} from "../../../../../.types/customer";
 import {getCustomerData} from "../../../../../.api/customer-api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import NotificationScreen from "./notification";
 
 const CustomerProfile = ({
                              navigation
                          }: any) => {
 
-    const [index,setIndex] = useState<number>(0);
-    const [isEdit,setIsEdit] = useState<boolean>(false);
+    const [index, setIndex] = useState<number>(0);
+    const [isEdit, setIsEdit] = useState<boolean>(false);
 
-    const [customer,setCustomer] = useState<CustomerCreate>({
+    const [customer, setCustomer] = useState<CustomerCreate>({
         isActive: false,
         isMember: false,
         toPay: 0,
@@ -31,19 +32,17 @@ const CustomerProfile = ({
             isAccountNotExpired: true,
             isAccountNotLocked: true,
             isCredentialNotExpired: true,
-            isEnabled:true,
+            isEnabled: true,
             isRenting: false
         }
     });
 
     useEffect(() => {
-        fetchData().then(ignored => {})
+        fetchData().then(ignored => {
+        })
     }, [])
-    const fetchData  = async () => {
-       const id = await AsyncStorage.getItem('userID');
-        console.log("the id ");
-        console.log(id);
-
+    const fetchData = async () => {
+        const id = await AsyncStorage.getItem('userID');
         await getCustomerData(id).then(result => {
             setCustomer(result)
         })
@@ -55,7 +54,7 @@ const CustomerProfile = ({
                 size={64}
                 rounded
                 title="Rd"
-                containerStyle={{ backgroundColor: 'indigo' }}
+                containerStyle={{backgroundColor: 'indigo'}}
             >
                 <Avatar.Accessory size={25} onPress={() => setIsEdit(true)}/>
             </Avatar>
@@ -106,7 +105,12 @@ const CustomerProfile = ({
             </Tab>
 
             {
-                index === 0?<UserData isEdit={isEdit} user={customer.user} setCustomer={setCustomer} navigation={navigation}/>: <ClientAction navigation={navigation}/>
+                index === 0
+                    ?
+                    <UserData isEdit={isEdit} user={customer.user} setCustomer={setCustomer}
+                              navigation={navigation}/> : index === 1 ?
+                        <ClientAction navigation={navigation}/> :
+                        <NotificationScreen/>
             }
 
         </View>
