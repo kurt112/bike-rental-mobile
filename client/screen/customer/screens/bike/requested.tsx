@@ -1,8 +1,9 @@
 import {Fragment} from "react";
-import {Animated, StyleSheet, Text, View} from "react-native";
-import {Button, Card} from "@rneui/themed";
+import {Animated, StyleSheet, View} from "react-native";
+import {Button} from "@rneui/themed";
 import ScrollView = Animated.ScrollView;
 import {BikeObject} from "../../../../../.types/bike";
+import BikeCard from "../../../utils/BikeCard";
 
 interface props {
     bikes: BikeObject[] | undefined
@@ -17,21 +18,7 @@ const BikeRequested = ({
                 <View style={styles.container}>
                     {
                         bikes?.map(bike => {
-                            return <Card key={bike.id}>
-                                <Card.Title>{bike.brand}</Card.Title>
-                                <Card.Divider/>
-                                <Card.Image
-                                    style={{padding: 0}}
-                                    source={{
-                                        uri:
-                                            'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg',
-                                    }}
-                                />
-                                <Text style={{marginBottom: 5, marginTop: 5, textAlign: 'center'}}>
-                                    {
-                                        bike.description
-                                    }
-                                </Text>
+                            return <BikeCard bike={bike} key={bike.id}>
                                 <Button
                                     buttonStyle={{
                                         borderRadius: 0,
@@ -42,7 +29,7 @@ const BikeRequested = ({
                                     title="Cancel"
                                     color={'error'}
                                 />
-                            </Card>
+                            </BikeCard>
                         })
                     }
                 </View>

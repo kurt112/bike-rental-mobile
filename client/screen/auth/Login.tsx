@@ -3,7 +3,7 @@ import {erickLogo} from "../../../image";
 import {View} from "react-native";
 import {Button, Input} from "@rneui/themed";
 import {StatusBar} from "expo-status-bar";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import styles from "../style/LoginStyle";
 import {UserLogin} from "../../../.types/credential";
 import {axiosSubmit} from "../../../.config/api";
@@ -16,8 +16,8 @@ const Login = ({
                }: any) => {
 
     const [cred, setCred] = useState<UserLogin>({
-        username: '',
-        password: ''
+        username: 'admin@email.com',
+        password: 'erikbikeshop'
     });
     const [error,setError] = useState<string>('');
 
@@ -26,6 +26,10 @@ const Login = ({
         newCred[key] = value;
         setCred(newCred)
     }
+
+    useEffect(() => {
+        _handleLogin().then(ignored=> {})
+    }, [])
 
 
     const _handleLogin = async () => {
@@ -50,11 +54,11 @@ const Login = ({
             );
 
             if(user.userRole === 'customer'){
-                navigation.navigate('Your Screen', {name: 'Customer Screen'})
+                navigation.navigate('Customer Screen', {name: 'Customer Screen'})
             }else if(user.userRole === 'employee'){
                 console.log('employee')
             }else if(user.userRole === 'admin'){
-                console.log('admin')
+                navigation.navigate('Admin Screen', {name: 'Admin Screen'})
             }
 
             setError('');
@@ -64,6 +68,7 @@ const Login = ({
                 password: ''
             })
         }).catch(error => {
+            console.log(error);
             const {data} = error.response;
 
             setError(data.message);

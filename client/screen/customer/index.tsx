@@ -3,14 +3,13 @@ import RentingScreens from "./screens/Main/rentingScreens";
 import NotRentingScreens from "./screens/Main/notRentingScreens";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const CustomerMainScreen = () => {
+const  CustomerMainScreen = () => {
 
     const [isRenting, setIsRenting] = useState<boolean>(false);
 
     useEffect(() => {
         renting().then((renting: any) => {
-
-            setIsRenting(renting);
+            setIsRenting(JSON.parse(renting));
         })
     }, [])
 
@@ -21,7 +20,7 @@ const CustomerMainScreen = () => {
     return (
         <Fragment>
             {
-                isRenting === true? <RentingScreens/> :
+                isRenting? <RentingScreens/> :
                     <NotRentingScreens/>
             }
 

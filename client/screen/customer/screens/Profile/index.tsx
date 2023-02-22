@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {StyleSheet, View} from "react-native";
-import {Avatar, Tab, TabView, Text} from "@rneui/themed";
+import {Avatar, Tab, Text} from "@rneui/themed";
 import UserData from "./data";
 import ClientAction from "./action";
-import {CustomerCreate} from "../../../../../.types/customer";
-import {getCustomerData} from "../../../../../.api/customer-api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import NotificationScreen from "./notification";
+import {getUserDataByToken} from "../../../../../.api/user-api";
+import {UserCreate} from "../../../../../.types/user";
 
 const CustomerProfile = ({
                              navigation
@@ -15,26 +14,21 @@ const CustomerProfile = ({
     const [index, setIndex] = useState<number>(0);
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
-    const [customer, setCustomer] = useState<CustomerCreate>({
-        isActive: false,
-        isMember: false,
-        toPay: 0,
-        user: {
-            email: '',
-            firstName: '',
-            lastName: '',
-            middleName: '',
-            gender: '',
-            password: '',
-            birthdate: '',
-            userRole: '',
-            cellphone: '',
-            isAccountNotExpired: true,
-            isAccountNotLocked: true,
-            isCredentialNotExpired: true,
-            isEnabled: true,
-            isRenting: false
-        }
+    const [user, setUser] = useState<UserCreate>({
+        email: '',
+        firstName: '',
+        lastName: '',
+        middleName: '',
+        gender: '',
+        password: '',
+        birthdate: '',
+        userRole: '',
+        cellphone: '',
+        isAccountNotExpired: true,
+        isAccountNotLocked: true,
+        isCredentialNotExpired: true,
+        isEnabled: true,
+        isRenting: false
     });
 
     useEffect(() => {
@@ -42,9 +36,10 @@ const CustomerProfile = ({
         })
     }, [])
     const fetchData = async () => {
-        const id = await AsyncStorage.getItem('userID');
-        await getCustomerData(id).then(result => {
-            setCustomer(result)
+
+
+        await getUserDataByToken().then(result => {
+            setUser(result)
         })
     }
 
@@ -61,9 +56,9 @@ const CustomerProfile = ({
 
             <View style={styles.nameContainer}>
                 <Text style={styles.displayName}>
-                    {
-                        `${customer.user?.firstName} ${customer.user?.lastName}`
-                    }
+                    {/*{*/}
+                    {/*    `${customer.user.firstName} ${customer.user.lastName}`*/}
+                    {/*}*/}
                 </Text>
             </View>
 
@@ -107,7 +102,7 @@ const CustomerProfile = ({
             {
                 index === 0
                     ?
-                    <UserData isEdit={isEdit} user={customer.user} setCustomer={setCustomer}
+                    <UserData isEdit={isEdit} user={user} setCustomer={setUser}
                               navigation={navigation}/> : index === 1 ?
                         <ClientAction navigation={navigation}/> :
                         <NotificationScreen/>

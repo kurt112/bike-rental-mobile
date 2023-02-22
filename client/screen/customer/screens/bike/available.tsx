@@ -1,10 +1,11 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {Animated, StyleSheet, Text, View} from "react-native";
+import {Animated, StyleSheet, View} from "react-native";
 import {BikeObject} from "../../../../../.types/bike";
 import {Button, Card} from "@rneui/themed";
 import ScrollView = Animated.ScrollView;
 import {getBikeAvailable} from "../../../../../.api/bike-api";
 import BikeNavigation from "../../../../../navigation/Bike";
+import BikeCard from "../../../utils/BikeCard";
 
 const BikeAvailable = ({
                            navigation
@@ -24,7 +25,6 @@ const BikeAvailable = ({
     const _handleLastPage = async () => {
         await getBikeAvailable('', page, 10).then(newBikes => {
             if (newBikes.length === 0) {
-                console.log(bikes.length);
                 setIsLoadMoreVisible(false);
                 return;
             }
@@ -34,7 +34,6 @@ const BikeAvailable = ({
             setPage(newPage)
             setBikes(tempBikes)
         }).catch(error => {
-            console.log(error)
         })
 
     }
@@ -45,21 +44,7 @@ const BikeAvailable = ({
                 <View style={styles.container}>
                     {
                         bikes?.map(bike => {
-                            return <Card key={bike.id}>
-                                <Card.Title>{bike.brand}</Card.Title>
-                                <Card.Divider/>
-                                <Card.Image
-                                    style={{padding: 0}}
-                                    source={{
-                                        uri:
-                                            'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg',
-                                    }}
-                                />
-                                <Text style={{marginBottom: 5, marginTop: 5, textAlign: 'center'}}>
-                                    {
-                                        bike.description
-                                    }
-                                </Text>
+                            return <BikeCard bike={bike} key={bike.id}>
                                 <Button
                                     buttonStyle={{
                                         borderRadius: 0,
@@ -67,10 +52,10 @@ const BikeAvailable = ({
                                         marginRight: 0,
                                         marginBottom: 0,
                                     }}
-                                    onPress={ () => navigation.navigate(BikeNavigation.Request.name, {name: BikeNavigation.Request.name})}
+                                    onPress={() => navigation.navigate(BikeNavigation.Request.name, {name: BikeNavigation.Request.name})}
                                     title="Request Now"
                                 />
-                            </Card>
+                            </BikeCard>
                         })
                     }
                 </View>
