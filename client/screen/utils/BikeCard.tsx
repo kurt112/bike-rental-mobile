@@ -20,7 +20,9 @@ const BikeCard = ({
                 textTransform: 'capitalize',
                 fontSize: 20,
                 color: 'black'
-            }}>{bike.brand}</Card.Title>
+            }}>
+            {`${bike.brand} (${bike.price}₱/hr)`}
+        </Card.Title>
         <Card.Divider/>
         <Card.Image
             style={{padding: 0}}

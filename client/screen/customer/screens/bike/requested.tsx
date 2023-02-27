@@ -1,9 +1,11 @@
-import {Fragment} from "react";
+import React, {Fragment} from "react";
 import {Animated, StyleSheet, View} from "react-native";
 import {Button} from "@rneui/themed";
 import ScrollView = Animated.ScrollView;
 import {BikeObject} from "../../../../../.types/bike";
 import BikeCard from "../../../utils/BikeCard";
+import {cancelRequestBikeByCustomer} from "../../../../../.api/bike-api";
+import NoBikeAvailable from "../../../utils/NoBikeAvailable";
 
 interface props {
     bikes: BikeObject[] | undefined
@@ -12,12 +14,21 @@ interface props {
 const BikeRequested = ({
                            bikes
                        }: props) => {
+
+    const _handleCancelBike = async (id: any) => {
+        await cancelRequestBikeByCustomer(id).then(ignored => {
+        })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
     return (
         <Fragment>
             <ScrollView>
                 <View style={styles.container}>
                     {
-                        bikes?.map(bike => {
+                        bikes === undefined || bikes.length === 0 ? <NoBikeAvailable/> : bikes.map(bike => {
                             return <BikeCard bike={bike} key={bike.id}>
                                 <Button
                                     buttonStyle={{
@@ -28,6 +39,7 @@ const BikeRequested = ({
                                     }}
                                     title="Cancel"
                                     color={'error'}
+                                    onPress={() => _handleCancelBike(bike.id)}
                                 />
                             </BikeCard>
                         })

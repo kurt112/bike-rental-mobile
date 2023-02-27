@@ -1,11 +1,12 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {Animated, StyleSheet, View} from "react-native";
 import {BikeObject} from "../../../../../.types/bike";
-import {Button, Card} from "@rneui/themed";
+import {Button} from "@rneui/themed";
 import ScrollView = Animated.ScrollView;
 import {getBikeAvailable} from "../../../../../.api/bike-api";
 import BikeNavigation from "../../../../../navigation/Bike";
 import BikeCard from "../../../utils/BikeCard";
+import NoBikeAvailable from "../../../utils/NoBikeAvailable";
 
 const BikeAvailable = ({
                            navigation
@@ -16,7 +17,7 @@ const BikeAvailable = ({
     const [isLoadMoreVisible, setIsLoadMoreVisible] = useState(true)
 
     useEffect(() => {
-        getBikeAvailable('', page, 10).then(bikes => {
+        getBikeAvailable('', 1, 10).then(bikes => {
             setBikes(bikes)
             setPage(page + 1)
         })
@@ -43,7 +44,7 @@ const BikeAvailable = ({
             <ScrollView>
                 <View style={styles.container}>
                     {
-                        bikes?.map(bike => {
+                        bikes === undefined || bikes.length === 0 ? <NoBikeAvailable/> : bikes.map(bike => {
                             return <BikeCard bike={bike} key={bike.id}>
                                 <Button
                                     buttonStyle={{
@@ -52,7 +53,10 @@ const BikeAvailable = ({
                                         marginRight: 0,
                                         marginBottom: 0,
                                     }}
-                                    onPress={() => navigation.navigate(BikeNavigation.Request.name, {name: BikeNavigation.Request.name})}
+                                    onPress={() => navigation.navigate(BikeNavigation.Request.name, {
+                                        name: BikeNavigation.Request.name,
+                                        bikeId: bike.id
+                                    })}
                                     title="Request Now"
                                 />
                             </BikeCard>

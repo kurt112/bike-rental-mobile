@@ -42,8 +42,6 @@ export default function App() {
                               }
                 />
 
-
-
                 <Stack.Screen name={BikeNavigation.Request.name}
                               component={RequestNow}
                               options={{

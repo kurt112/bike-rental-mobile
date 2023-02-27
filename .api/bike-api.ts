@@ -1,6 +1,8 @@
 import {getBikeStatus} from "../utils/bike";
-import {graphQl} from "../.config/api";
+import {axiosCreate, graphQl} from "../.config/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {BikeObject} from "../.types/bike";
+import { URL, URLSearchParams } from 'react-native-url-polyfill';
 
 export const getBikeAvailable = async (search: any, page: any, size: any) => {
     const query = () => {
@@ -128,3 +130,73 @@ export const getBikeByCustomerWithLocation = async (search: any) => {
     return data.data.getBikeByCustomer;
 }
 
+export const getBikeData = async (id: any) => {
+    const query = () => {
+        return {
+            query: `query{
+                        bikeById(id:"${id}") {  
+                                size,
+                                brand,
+                                price,
+                                name,
+                                quantity,
+                                id,
+                                description,
+                                code,
+                                available,
+                                bikePictures{
+                                    id,
+                                    pictureName
+                                },
+                                parentBike{
+                                    id
+                                }
+                             }
+                        }`
+        }
+    };
+    const {data} = await graphQl.post('', query());
+
+    return data.data.bikeById;
+}
+
+export const requestBikeByCustomer = async (bike: BikeObject) => {
+
+    const token = await AsyncStorage.getItem('token');
+
+    if (!bike.endBarrow) {
+        alert('need date for end barrow')
+        return;
+    }
+
+    if (!bike.startBarrow) {
+        alert('need date for end barrow')
+        return;
+    }
+
+    if (!token) {
+        alert('No Token Found');
+        return;
+    }
+
+    const startDate = new Date(bike.startBarrow);
+    const endDate = new Date(bike.endBarrow);
+
+    return await axiosCreate.post("bike/request/" + token + "/" + bike.id + '/' + startDate + '/' + endDate, bike).then(ignored => alert('request Success'));
+}
+export const cancelRequestBikeByCustomer = async (bikeId: string) => {
+    const token = await AsyncStorage.getItem('token');
+    const params = new URLSearchParams();
+
+    if (!token) {
+        alert('No Token Found');
+        return;
+    }
+
+    params.append("token", token);
+    params.append("bikeId", bikeId);
+
+    await axiosCreate.post("bike/cancel",params).then(ignored => {
+        return alert('Success Request Cancel')
+    });
+}
