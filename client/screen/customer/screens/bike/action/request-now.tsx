@@ -1,15 +1,16 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {View, Text} from "react-native";
 import {BikeObject} from "../../../../../../.types/bike";
-import {getBikeData, requestBikeByCustomer} from "../../../../../../.api/bike-api";
+import {getBikeAvailable, getBikeByCustomer, getBikeData, requestBikeByCustomer} from "../../../../../../.api/bike-api";
 import {Button, Card} from "@rneui/themed";
 import {defaultBikeLogo} from "../../../../../../image";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import {formatDate} from "../../../../../../utils/date";
 import moment from "moment";
+import {getBikeStatus} from "../../../../../../utils/bike";
 
 const RequestNow = ({route, navigation}: any) => {
-    const {bikeId} = route.params;
+    const {bikeId, setBikes, setPage, setBikeRequested} = route.params;
     const [estimatedPrice, setEstimatedPrice] = useState<number>(0);
     const [totalHours, setTotalHours] = useState(0);
     const [dateStartOpen, setDateStartOpen] = useState(false);
@@ -54,7 +55,22 @@ const RequestNow = ({route, navigation}: any) => {
         bike.startBarrow = dateStart;
         bike.endBarrow = dateEnd;
         await requestBikeByCustomer(bike).then(ignored => {
-            navigation.goBack();
+            getBikeAvailable('', 1, 10).then(bikes => {
+                setPage(1);
+                setBikes(bikes)
+                getBikeByCustomer('').then(bikes => {
+                    const tempBikeRequested: BikeObject[] = [];
+                    bikes.forEach((bike: BikeObject) => {
+                        if (bike.status === getBikeStatus.FOR_REQUEST) {
+                            tempBikeRequested.push(bike);
+                        }
+                    })
+                    setBikeRequested(tempBikeRequested)
+
+                }).finally(() => {
+                    navigation.goBack();
+                });
+            })
         }).catch((ignored) => {
             alert('Please Cancel Your Request Bike')
         })

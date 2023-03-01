@@ -6,7 +6,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomerProfile from "../../Profile";
 
 const Tab = createBottomTabNavigator();
-const RentingScreens = () => {
+const RentingScreens = ({
+                            navigation
+                        }: any) => {
     return <Fragment>
         <Tab.Navigator
             screenOptions={({ route }) => ({

@@ -4,15 +4,17 @@ import CustomerProfile from "../../Profile";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import BikeAvailable from "../../bike/available";
 import BikeRequested from "../../bike/requested";
-import {getBikeByCustomer} from "../../../../../../.api/bike-api";
+import {getBikeAvailable, getBikeByCustomer} from "../../../../../../.api/bike-api";
 import {getBikeStatus} from "../../../../../../utils/bike";
 import {BikeObject} from "../../../../../../.types/bike";
+import {LogBox} from "react-native";
 const Tab = createBottomTabNavigator();
-const NotRentingScreens = () => {
-
+const NotRentingScreens = (props:any) => {
+    LogBox.ignoreLogs([
+        'Non-serializable values were found in the navigation state',
+    ]);
     const [available,setAvailable] = useState<BikeObject[]>();
     const [requested,setRequested] = useState<BikeObject[]>();
-
 
     useEffect(() => {
         getBikeByCustomer('').then(bikes => {
@@ -21,12 +23,14 @@ const NotRentingScreens = () => {
                 if (bike.status === getBikeStatus.FOR_REQUEST) {
                     tempBikeRequested.push(bike);
                 }
-                // else if (bike.status === getBikeStatus.RENTED) {
-                //     rented.push(bike);
-                // }
             })
             setRequested(tempBikeRequested)
         })
+
+        getBikeAvailable('', 1, 10).then(bikes => {
+            setAvailable(bikes)
+        })
+
     }, [])
 
     return (
@@ -63,11 +67,16 @@ const NotRentingScreens = () => {
                 })}>
                 <Tab.Screen
                     name={'Available'}
-                    component={BikeAvailable}
+                    children={() => <BikeAvailable bikes={available}
+                                                   setBikes={setAvailable}
+                                                   setBikeRequested={setRequested}
+                                                   {...props}
+                    />
+                }
                 />
                 <Tab.Screen
                     name={'Requested'}
-                    children={()=><BikeRequested bikes={requested}/>}
+                    children={()=><BikeRequested bikes={requested} setBikes={setRequested} {...props} />}
                 />
                 <Tab.Screen
                     name={'Profile'}

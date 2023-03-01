@@ -97,6 +97,7 @@ const Login = ({
             <Input
                 value={cred.password}
                 placeholder='Password'
+                secureTextEntry={true}
                 onChangeText={(e) => handlerChange(e,'password')}
             />
         </View>

@@ -1,6 +1,5 @@
-import React, {Fragment, useEffect, useState} from "react";
+import React, {Fragment, useState} from "react";
 import {Animated, StyleSheet, View} from "react-native";
-import {BikeObject} from "../../../../../.types/bike";
 import {Button} from "@rneui/themed";
 import ScrollView = Animated.ScrollView;
 import {getBikeAvailable} from "../../../../../.api/bike-api";
@@ -9,30 +8,24 @@ import BikeCard from "../../../utils/BikeCard";
 import NoBikeAvailable from "../../../utils/NoBikeAvailable";
 
 const BikeAvailable = ({
-                           navigation
+                           navigation,
+                           bikes,
+                           setBikes,
+                           setBikeRequested
                        }: any) => {
-
-    const [bikes, setBikes] = useState<BikeObject[]>([])
     const [page, setPage] = useState(1);
     const [isLoadMoreVisible, setIsLoadMoreVisible] = useState(true)
 
-    useEffect(() => {
-        getBikeAvailable('', 1, 10).then(bikes => {
-            setBikes(bikes)
-            setPage(page + 1)
-        })
-    }, [])
-
     const _handleLastPage = async () => {
-        await getBikeAvailable('', page, 10).then(newBikes => {
+        const newPage = page + 1;
+        setPage(newPage);
+        await getBikeAvailable('', newPage, 10).then(newBikes => {
             if (newBikes.length === 0) {
                 setIsLoadMoreVisible(false);
                 return;
             }
             const tempBikes = [...bikes]
             tempBikes.concat(newBikes);
-            const newPage = page + 1;
-            setPage(newPage)
             setBikes(tempBikes)
         }).catch(error => {
         })
@@ -44,7 +37,7 @@ const BikeAvailable = ({
             <ScrollView>
                 <View style={styles.container}>
                     {
-                        bikes === undefined || bikes.length === 0 ? <NoBikeAvailable/> : bikes.map(bike => {
+                        bikes === undefined || bikes.length === 0 ? <NoBikeAvailable/> : bikes.map((bike: any) => {
                             return <BikeCard bike={bike} key={bike.id}>
                                 <Button
                                     buttonStyle={{
@@ -54,6 +47,9 @@ const BikeAvailable = ({
                                         marginBottom: 0,
                                     }}
                                     onPress={() => navigation.navigate(BikeNavigation.Request.name, {
+                                        setBikeRequested: setBikeRequested,
+                                        setPage: setPage,
+                                        setBikes: setBikes,
                                         name: BikeNavigation.Request.name,
                                         bikeId: bike.id
                                     })}

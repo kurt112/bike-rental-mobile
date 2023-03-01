@@ -3,7 +3,9 @@ import RentingScreens from "./screens/Main/rentingScreens";
 import NotRentingScreens from "./screens/Main/notRentingScreens";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const  CustomerMainScreen = () => {
+const CustomerMainScreen = ({
+                                navigation
+                            }: any) => {
 
     const [isRenting, setIsRenting] = useState<boolean>(false);
 
@@ -20,8 +22,8 @@ const  CustomerMainScreen = () => {
     return (
         <Fragment>
             {
-                isRenting? <RentingScreens/> :
-                    <NotRentingScreens/>
+                isRenting ? <RentingScreens navigation={navigation}/> :
+                    <NotRentingScreens navigation={navigation}/>
             }
 
         </Fragment>

@@ -19,7 +19,6 @@ const AdminRented = ({
 
     useEffect(() => {
         getBikes('', page, 10, getBikeStatus.RENTED).then(bikes => {
-            console.log(bikes);
             setBikes(bikes)
             setPage(page + 1)
         })

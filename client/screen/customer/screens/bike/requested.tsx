@@ -4,23 +4,34 @@ import {Button} from "@rneui/themed";
 import ScrollView = Animated.ScrollView;
 import {BikeObject} from "../../../../../.types/bike";
 import BikeCard from "../../../utils/BikeCard";
-import {cancelRequestBikeByCustomer} from "../../../../../.api/bike-api";
+import {cancelRequestBikeByCustomer, getBikeByCustomer} from "../../../../../.api/bike-api";
 import NoBikeAvailable from "../../../utils/NoBikeAvailable";
+import {getBikeStatus} from "../../../../../utils/bike";
 
 interface props {
     bikes: BikeObject[] | undefined
+    setBikes: any
 }
 
 const BikeRequested = ({
-                           bikes
+                           bikes,
+                           setBikes
                        }: props) => {
 
     const _handleCancelBike = async (id: any) => {
         await cancelRequestBikeByCustomer(id).then(ignored => {
-        })
-            .catch(error => {
-                console.log(error);
+            getBikeByCustomer('').then(bikes => {
+                const tempBikeRequested:BikeObject[] = [];
+                bikes.forEach((bike: BikeObject) => {
+                    if (bike.status === getBikeStatus.FOR_REQUEST) {
+                        tempBikeRequested.push(bike);
+                    }
+                })
+                setBikes(tempBikeRequested)
             })
+        }).catch(error => {
+            console.log(error);
+        })
     }
 
     return (
