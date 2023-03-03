@@ -2,7 +2,7 @@ import {getBikeStatus} from "../utils/bike";
 import {axiosCreate, graphQl} from "../.config/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {BikeObject} from "../.types/bike";
-import { URL, URLSearchParams } from 'react-native-url-polyfill';
+import {  URLSearchParams } from 'react-native-url-polyfill';
 
 export const getBikeAvailable = async (search: any, page: any, size: any) => {
     const query = () => {
@@ -198,5 +198,31 @@ export const cancelRequestBikeByCustomer = async (bikeId: string) => {
 
     await axiosCreate.post("bike/cancel",params).then(ignored => {
         return alert('Success Request Cancel')
+    });
+}
+
+export const handleTerminateBikeByCustomer = async (userId: string, bikeId: string) => {
+
+    const params = new URLSearchParams();
+    params.append("userId", userId);
+    params.append("bikeId", bikeId);
+
+    await axiosCreate.post("bike/terminate", params).then(ignored => {
+        alert('Terminate Success')
+    }).then(() => {
+        alert('Terminate Failed')
+    });
+}
+
+export const handleApproveRequestByCustomer = async (userId: string, bikeId: string) => {
+
+    const params = new URLSearchParams();
+    params.append("userId", userId);
+    params.append("bikeId", bikeId);
+
+    await axiosCreate.post("bike/request/approval", params).then(ignored => {
+        alert('Approve Success')
+    }).catch(error => {
+        alert('Error Detected')
     });
 }

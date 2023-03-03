@@ -1,15 +1,14 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {BikeObject} from "../../../../.types/bike";
-import {getBikes} from "../../../../.api/bike-api";
-import {Animated, View} from "react-native";
+import {getBikes, handleApproveRequestByCustomer} from "../../../../.api/bike-api";
+import {Alert, Animated, Linking, View} from "react-native";
 import BikeCard from "../../utils/BikeCard";
 import {Button} from "@rneui/themed";
-import BikeNavigation from "../../../../navigation/Bike";
 import ScrollView = Animated.ScrollView;
 import {getBikeStatus} from "../../../../utils/bike";
 import NoBikeAvailable from "../../utils/NoBikeAvailable";
 import styles from "../../style/style";
-import {success} from "../../../../style";
+import {info, success} from "../../../../style";
 
 const Requests = ({
                       navigation
@@ -42,25 +41,57 @@ const Requests = ({
 
     }
 
+    const _handleApprove = (userId: string, bikeId: string) => {
+        Alert.alert('Approval;', `You're about to approve this rent`, [
+            {
+                text: 'Yes',
+                onPress: () => {
+                    handleApproveRequestByCustomer(userId,bikeId).then(ignored => {
+                        getBikes('', 1, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
+                            setBikes(bikes)
+                            setPage(1)
+                        })
+                    })
+                },
+                style: 'cancel',
+            },
+            {text: 'Cancel', onPress: () => console.log('OK Pressed')},
+        ]);
+    }
+
     return <Fragment>
         <ScrollView>
             <View style={styles.bikeContainer}>
                 {
                     bikes.length === 0 ?
-                      <NoBikeAvailable/>
+                        <NoBikeAvailable/>
                         :
-                        bikes.map(bike => {
+                        bikes.map((bike: any) => {
+                            const {assignedCustomer} = bike;
+                            const {user} = assignedCustomer;
+                            const {firstName, lastName} = user
                             return <BikeCard bike={bike} key={bike.id}>
                                 <Button
                                     buttonStyle={{
                                         borderRadius: 0,
                                         marginLeft: 0,
                                         marginRight: 0,
-                                        marginBottom: 0,
+                                        marginBottom: 5,
                                         backgroundColor: success
                                     }}
-                                    onPress={() => navigation.navigate(BikeNavigation.Request.name, {name: BikeNavigation.Request.name})}
+                                    onPress={() => _handleApprove(user.id,bike.id)}
                                     title="Approve"
+                                />
+                                <Button
+                                    buttonStyle={{
+                                        borderRadius: 0,
+                                        marginLeft: 0,
+                                        marginRight: 0,
+                                        marginBottom: 5,
+                                        backgroundColor: info
+                                    }}
+                                    onPress={() => Linking.openURL(`https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike.customerReceipt.picture}`)}
+                                    title="View Receipt"
                                 />
                             </BikeCard>
                         })

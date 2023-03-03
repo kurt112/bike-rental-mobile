@@ -1,8 +1,8 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {BikeObject} from "../../../../.types/bike";
-import {getBikes} from "../../../../.api/bike-api";
+import {getBikes, handleTerminateBikeByCustomer} from "../../../../.api/bike-api";
 import {getBikeStatus} from "../../../../utils/bike";
-import {ScrollView, View} from "react-native";
+import {Alert, ScrollView, View} from "react-native";
 import styles from "../../style/style";
 import NoBikeAvailable from "../../utils/NoBikeAvailable";
 import BikeCard from "../../utils/BikeCard";
@@ -40,6 +40,25 @@ const AdminRented = ({
 
     }
 
+    const _handleTerminate = async (userId: string, bikeId: string) => {
+        Alert.alert('Termination', `You're about to terminate this rent`, [
+            {
+                text: 'Yes',
+                onPress: () => {
+                    handleTerminateBikeByCustomer(userId,bikeId).then(ignored => {
+                        getBikes('', 1, 10, getBikeStatus.RENTED).then(bikes => {
+                            setBikes(bikes)
+                            setPage(1)
+                        })
+                    })
+                },
+                style: 'cancel',
+            },
+            {text: 'Cancel', onPress: () => console.log('OK Pressed')},
+        ]);
+
+    }
+
     return <Fragment>
         <ScrollView>
             <View style={styles.bikeContainer}>
@@ -47,7 +66,10 @@ const AdminRented = ({
                     bikes.length === 0 ?
                         <NoBikeAvailable/>
                         :
-                        bikes.map(bike => {
+                        bikes.map((bike: any) => {
+                            const {assignedCustomer} = bike;
+                            const {user} = assignedCustomer;
+                            const {firstName, lastName} = user
                             return <BikeCard bike={bike} key={bike.id}>
                                 <Button
                                     buttonStyle={{
@@ -57,7 +79,7 @@ const AdminRented = ({
                                         marginBottom: 0,
                                         backgroundColor: danger
                                     }}
-                                    onPress={() => navigation.navigate(BikeNavigation.Request.name, {name: BikeNavigation.Request.name})}
+                                    onPress={() => _handleTerminate(user.id,bike.id)}
                                     title="Terminate"
                                 />
                             </BikeCard>
