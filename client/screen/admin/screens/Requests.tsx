@@ -1,14 +1,15 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {BikeObject} from "../../../../.types/bike";
-import {getBikes, handleApproveRequestByCustomer} from "../../../../.api/bike-api";
+import {getBikes, handleApproveRequestByCustomer, handleRejectBikeRequestBYCustomer} from "../../../../.api/bike-api";
 import {Alert, Animated, Linking, View} from "react-native";
 import BikeCard from "../../utils/BikeCard";
-import {Button} from "@rneui/themed";
+import {Button, Text} from "@rneui/themed";
 import ScrollView = Animated.ScrollView;
 import {getBikeStatus} from "../../../../utils/bike";
 import NoBikeAvailable from "../../utils/NoBikeAvailable";
 import styles from "../../style/style";
-import {info, success} from "../../../../style";
+import {danger, info, primary, success} from "../../../../style";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Requests = ({
                       navigation
@@ -38,15 +39,14 @@ const Requests = ({
             setBikes(tempBikes)
         }).catch(ignored => {
         })
-
     }
 
-    const _handleApprove = (userId: string, bikeId: string) => {
-        Alert.alert('Approval;', `You're about to approve this rent`, [
+    const _handleReject = async (userId: string, bikeId: string) => {
+        Alert.alert('Rejection;', `You're about to reject this request?`, [
             {
                 text: 'Yes',
                 onPress: () => {
-                    handleApproveRequestByCustomer(userId,bikeId).then(ignored => {
+                    handleRejectBikeRequestBYCustomer(userId, bikeId).then(ignored => {
                         getBikes('', 1, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
                             setBikes(bikes)
                             setPage(1)
@@ -55,7 +55,25 @@ const Requests = ({
                 },
                 style: 'cancel',
             },
-            {text: 'Cancel', onPress: () => console.log('OK Pressed')},
+            {text: 'Cancel', onPress: () =>{}},
+        ]);
+    }
+
+    const _handleApprove = (userId: string, bikeId: string) => {
+        Alert.alert('Approval;', `You're about to approve this rent`, [
+            {
+                text: 'Yes',
+                onPress: () => {
+                    handleApproveRequestByCustomer(userId, bikeId).then(ignored => {
+                        getBikes('', 1, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
+                            setBikes(bikes)
+                            setPage(1)
+                        })
+                    })
+                },
+                style: 'cancel',
+            },
+            {text: 'Cancel', onPress: () => {}},
         ]);
     }
 
@@ -69,43 +87,67 @@ const Requests = ({
                         bikes.map((bike: any) => {
                             const {assignedCustomer} = bike;
                             const {user} = assignedCustomer;
-                            const {firstName, lastName} = user
+                            const {firstName, lastName, validIdPhoto} = user
                             return <BikeCard bike={bike} key={bike.id}>
-                                <Button
-                                    buttonStyle={{
-                                        borderRadius: 0,
-                                        marginLeft: 0,
-                                        marginRight: 0,
-                                        marginBottom: 5,
-                                        backgroundColor: success
-                                    }}
-                                    onPress={() => _handleApprove(user.id,bike.id)}
-                                    title="Approve"
-                                />
-                                <Button
-                                    buttonStyle={{
-                                        borderRadius: 0,
-                                        marginLeft: 0,
-                                        marginRight: 0,
-                                        marginBottom: 5,
-                                        backgroundColor: info
-                                    }}
-                                    onPress={() => Linking.openURL(`https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike.customerReceipt.picture}`)}
-                                    title="View Receipt"
-                                />
+                                <View style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    flexDirection: 'row',
+                                    borderTopWidth: .5,
+                                    borderColor: 'grey',
+                                    paddingTop: 10
+                                }}>
+                                    <View
+                                        style={{display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'row'}}>
+                                        {
+                                            bike.customerReceipt === null || bike.customerReceipt.picture === ''?  <Text style={{color: 'red'}}>No Receipt </Text> :
+                                                <Ionicons name="receipt-outline"
+                                                          size={32}
+                                                          onPress={() => Linking.openURL(`https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike.customerReceipt.picture}`)}
+                                                          color={info}
+                                                />
+                                        }
+
+                                        {
+                                            validIdPhoto === null || validIdPhoto === '' ? <Text style={{color: 'red'}}>No Valid ID</Text> :
+                                                <Ionicons name="person-circle-outline"
+                                                          size={32}
+                                                          onPress={() => Linking.openURL(`https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${validIdPhoto}`)}
+                                                          color={primary}
+                                                />
+                                        }
+                                    </View>
+
+                                    <View style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        flexDirection: 'row'
+                                    }}>
+                                        <Ionicons name="checkmark-circle-outline"
+                                                  size={32}
+                                                  onPress={() => _handleApprove(user.id, bike.id)}
+                                                  color={success}
+                                        />
+                                        <Ionicons name="trash-bin-outline"
+                                                  size={32}
+                                                  onPress={() => _handleReject(user.id, bike.id)}
+                                                  color={danger}
+                                        />
+                                    </View>
+                                </View>
                             </BikeCard>
                         })
                 }
             </View>
             {
-                isLoadMoreVisible && bikes.length !== 0 ? <Button
-                    containerStyle={{
+                isLoadMoreVisible && bikes.length !== 0 ?
+                    <Button containerStyle={{
                         width: '100%'
                     }}
-                    title="Load More"
-                    type="clear"
-                    onPress={_handleLastPage}
-                /> : null
+                            title="Load More"
+                            type="clear"
+                            onPress={_handleLastPage}
+                    /> : null
             }
         </ScrollView>
     </Fragment>

@@ -2,16 +2,16 @@ import React, {Fragment, useEffect, useState} from "react";
 import {BikeObject} from "../../../../.types/bike";
 import {getBikes, handleTerminateBikeByCustomer} from "../../../../.api/bike-api";
 import {getBikeStatus} from "../../../../utils/bike";
-import {Alert, ScrollView, View} from "react-native";
+import {Alert, Linking, ScrollView, Text, View} from "react-native";
 import styles from "../../style/style";
 import NoBikeAvailable from "../../utils/NoBikeAvailable";
 import BikeCard from "../../utils/BikeCard";
 import {Button} from "@rneui/themed";
-import BikeNavigation from "../../../../navigation/Bike";
-import {danger} from "../../../../style";
+import {info, primary, warning} from "../../../../style";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const AdminRented = ({
-    navigation
+                         navigation
                      }: any) => {
     const [bikes, setBikes] = useState<BikeObject[]>([])
     const [page, setPage] = useState(1);
@@ -45,7 +45,7 @@ const AdminRented = ({
             {
                 text: 'Yes',
                 onPress: () => {
-                    handleTerminateBikeByCustomer(userId,bikeId).then(ignored => {
+                    handleTerminateBikeByCustomer(userId, bikeId).then(ignored => {
                         getBikes('', 1, 10, getBikeStatus.RENTED).then(bikes => {
                             setBikes(bikes)
                             setPage(1)
@@ -69,19 +69,50 @@ const AdminRented = ({
                         bikes.map((bike: any) => {
                             const {assignedCustomer} = bike;
                             const {user} = assignedCustomer;
-                            const {firstName, lastName} = user
+                            const {firstName, lastName, validIdPhoto} = user
                             return <BikeCard bike={bike} key={bike.id}>
-                                <Button
-                                    buttonStyle={{
-                                        borderRadius: 0,
-                                        marginLeft: 0,
-                                        marginRight: 0,
-                                        marginBottom: 0,
-                                        backgroundColor: danger
-                                    }}
-                                    onPress={() => _handleTerminate(user.id,bike.id)}
-                                    title="Terminate"
-                                />
+                                <View style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    flexDirection: 'row',
+                                    borderTopWidth: .5,
+                                    borderColor: 'grey',
+                                    paddingTop: 10
+                                }}>
+                                    <View
+                                        style={{display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'row'}}>
+                                        {
+                                            bike.customerReceipt === null || bike.customerReceipt.picture === '' ? <Text style={{color: 'red'}}>No Receipt</Text> :
+                                                <Ionicons name="receipt-outline"
+                                                          size={32}
+                                                          onPress={() => Linking.openURL(`https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike.customerReceipt.picture}`)}
+                                                          color={info}
+                                                />
+                                        }
+                                        {
+                                            validIdPhoto === null || validIdPhoto === '' ? <Text style={{color: 'red'}}>No Valid ID</Text> :
+                                                <Ionicons name="person-circle-outline"
+                                                          size={32}
+                                                          onPress={() => Linking.openURL(`https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${validIdPhoto}`)}
+                                                          color={primary}
+                                                />
+                                        }
+                                    </View>
+
+                                    <View style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        flexDirection: 'row'
+                                    }}>
+                                        <Ionicons name="stop-circle-outline"
+                                                  size={32}
+                                                  onPress={() => _handleTerminate(user.id, bike.id)}
+                                                  color={warning}
+                                        />
+
+                                    </View>
+                                </View>
+
                             </BikeCard>
                         })
                 }

@@ -89,7 +89,8 @@ export const getBikes = async (search: any, page: any, size: any, status: any) =
                                        firstName,
                                        lastName,
                                        cellphone,
-                                       email
+                                       email,
+                                       validIdPhoto
                                     }
                                 },
                                  bikePictures{
@@ -225,4 +226,12 @@ export const handleApproveRequestByCustomer = async (userId: string, bikeId: str
     }).catch(error => {
         alert('Error Detected')
     });
+}
+
+export const handleRejectBikeRequestBYCustomer = async (userId: string, bikeId: string) => {
+    const params = new URLSearchParams();
+    params.append("userId", userId);
+    params.append("bikeId", bikeId);
+
+    return await axiosCreate.post("bike/request/rejected", params).then(ignored => {});
 }
