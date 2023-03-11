@@ -16,8 +16,8 @@ const Login = ({
                }: any) => {
 
     const [cred, setCred] = useState<UserLogin>({
-        username: 'admin@email.com',
-        password: 'erikbikeshop'
+        username: '',
+        password: ''
     });
     const [error,setError] = useState<string>('');
 

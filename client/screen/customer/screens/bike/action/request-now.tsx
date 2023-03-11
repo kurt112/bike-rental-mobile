@@ -8,7 +8,7 @@ import RNDateTimePicker from "@react-native-community/datetimepicker";
 import {formatDate} from "../../../../../../utils/date";
 import moment from "moment";
 import {getBikeStatus} from "../../../../../../utils/bike";
-
+import * as DocumentPicker from 'expo-document-picker';
 const RequestNow = ({route, navigation}: any) => {
     const {bikeId, setBikes, setPage, setBikeRequested} = route.params;
     const [estimatedPrice, setEstimatedPrice] = useState<number>(0);
