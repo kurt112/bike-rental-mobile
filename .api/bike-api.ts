@@ -144,7 +144,7 @@ export const getBikeData = async (id: any) => {
                                 id,
                                 description,
                                 code,
-                                available,
+                                isAvailable,
                                 bikePictures{
                                     id,
                                     pictureName
@@ -157,6 +157,8 @@ export const getBikeData = async (id: any) => {
         }
     };
     const {data} = await graphQl.post('', query());
+
+    console.log(data)
 
     return data.data.bikeById;
 }
