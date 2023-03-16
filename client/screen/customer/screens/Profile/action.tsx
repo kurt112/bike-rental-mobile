@@ -2,15 +2,24 @@ import {Fragment} from "react";
 import {StyleSheet, View} from "react-native";
 import {Button} from "@rneui/themed";
 import AuthNavigation from "../../../../../navigation/Auth";
+import {success} from "../../../../../style";
 
 const ClientAction = ({
                           navigation
                       }: any) => {
+    const _handleChangePass = () => {
+        alert('to be implemented task by joselito')
+    }
     return <Fragment>
         <View style={styles.buttonContainer}>
             <Button size="md" color='error' style={styles.button}
                     onPress={() => navigation.navigate(AuthNavigation.Login.name, {name: AuthNavigation.Login.name})}>
                 Logout
+            </Button>
+            <View style={{marginTop: 10}}></View>
+            <Button size="md" color={success} style={styles.button}
+                    onPress={_handleChangePass}>
+                Change Password
             </Button>
         </View>
     </Fragment>

@@ -3,6 +3,7 @@ import moment from "moment";
 import {CustomerCreate} from "../.types/customer";
 import {UserValidationMessage} from "../.types/user";
 import {path} from '../utils/api/endpoint'
+import {  URLSearchParams } from 'react-native-url-polyfill';
 
 /*export const handleSubmitCustomer = async (customer:CustomerCreate) => {
     return await axiosSubmit.post(path.customer,customer).then(ignored => {
@@ -229,4 +230,19 @@ export const checkIfUserIsRenting = async () => {
     });
 
     return data;
+}
+
+export const handleUploadReceiptCustomer = async (picture: any) => {
+    const token = localStorage.getItem('token');
+    const params = new URLSearchParams();
+
+    params.append('token',""+token);
+    params.append('picture',picture);
+
+
+    return await axiosSubmit.post(path.customer+ '/receipt',params).then(data => {
+        return data;
+    }).catch(error => {
+        console.log(error)
+    });
 }

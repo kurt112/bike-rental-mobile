@@ -1,14 +1,18 @@
-import React, {Fragment, useEffect, useState} from "react";
-import {View, Text} from "react-native";
+import React, {useEffect, useState} from "react";
+import {View,  ScrollView} from "react-native";
 import {BikeObject} from "../../../../../../.types/bike";
 import {getBikeAvailable, getBikeByCustomer, getBikeData, requestBikeByCustomer} from "../../../../../../.api/bike-api";
-import {Button, Card} from "@rneui/themed";
+import {Button, Card,Text} from "@rneui/themed";
 import {defaultBikeLogo} from "../../../../../../image";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import {formatDate} from "../../../../../../utils/date";
 import moment from "moment";
 import {getBikeStatus} from "../../../../../../utils/bike";
 import * as DocumentPicker from 'expo-document-picker';
+import {success} from "../../../../../../style";
+import {uploadToS3} from "../../../../../../.api/aws/s3";
+import {handleUploadReceiptCustomer} from "../../../../../../.api/customer-api";
+
 const RequestNow = ({route, navigation}: any) => {
     const {bikeId, setBikes, setPage, setBikeRequested} = route.params;
     const [estimatedPrice, setEstimatedPrice] = useState<number>(0);
@@ -17,6 +21,7 @@ const RequestNow = ({route, navigation}: any) => {
     const [dateEndOpen, setDateEndOpen] = useState(false)
     const [dateStart, setDateStart] = useState<Date | undefined>(new Date());
     const [dateEnd, setDateEnd] = useState<Date | undefined>(new Date());
+    const [receipt, setReceipt] = useState<any>();
 
     const [bike, setBike] = useState<BikeObject>({
         brand: '',
@@ -52,9 +57,11 @@ const RequestNow = ({route, navigation}: any) => {
     }, [dateStart, dateEnd])
 
     const _handleRequestBike = async () => {
+        let success = false;
         bike.startBarrow = dateStart;
         bike.endBarrow = dateEnd;
-        await requestBikeByCustomer(bike).then(ignored => {
+        await requestBikeByCustomer(bike).then(bike => {
+            success = true
             getBikeAvailable('', 1, 10).then(bikes => {
                 setPage(1);
                 setBikes(bikes)
@@ -74,6 +81,20 @@ const RequestNow = ({route, navigation}: any) => {
         }).catch((ignored) => {
             alert('Please Cancel Your Request Bike')
         })
+
+
+        if(success){
+            alert('Bike rent request success');
+        }
+        // will uncomment if answer find
+        // if(success && receipt !== ''){
+        //     await uploadToS3(receipt,null).then(name => {
+        //         handleUploadReceiptCustomer(name).then(ignored => {
+        //
+        //         })
+        //     })
+        // }else if (success) {
+        // }
     }
 
     const _handleChangeDateStart = (e: any, date: Date | undefined, index: number) => {
@@ -87,7 +108,16 @@ const RequestNow = ({route, navigation}: any) => {
         }
     }
 
-    return <Fragment>
+
+    const _uploadReceipt = async () => {
+        let result: any = await DocumentPicker.getDocumentAsync({});
+
+
+        setReceipt(result);
+    }
+
+    return <ScrollView style={{flex: 1}}>
+
         <View style={{
             marginBottom: 20
         }}>
@@ -126,7 +156,7 @@ const RequestNow = ({route, navigation}: any) => {
             </Card>
         </View>
 
-        <View style={
+        <ScrollView contentContainerStyle={
             {
                 display: 'flex',
                 justifyContent: 'center',
@@ -208,19 +238,45 @@ const RequestNow = ({route, navigation}: any) => {
                     {estimatedPrice}
                 </Text>
             </View>
+            <View style={{
+                alignItems: 'center',
+                marginTop: 5,
+                backgroundColor: '#e8e4c9',
+                marginBottom: 10
+            }}>
+                {
+                    receipt ? <Text style={{
+                            fontWeight: 'bold',
+                                color: 'green',
+                            fontSize: 20
+                        }}>
+                            {receipt.name}
+                        </Text> :
+                        <Text style={{
+                            fontWeight: 'bold', color: 'red', fontSize: 20,
+                            paddingLeft: 20, paddingRight: 20
+                        }}>
+                            No Receipt Attached
+                        </Text>
+                }
+
+            </View>
             <View style={{marginBottom: 10}}>
-                <Button>
-                    Attached Receipt !
+                <Button onPress={_uploadReceipt} color={success}>
+                    {
+                        receipt? 'Change Receipt':'Attached Receipt'
+                    }
                 </Button>
             </View>
 
-        </View>
+        </ScrollView>
         <View>
             <Button onPress={_handleRequestBike}>
-                Request Now !
+                Rent Now
             </Button>
         </View>
-    </Fragment>
+
+    </ScrollView>
 }
 
 export default RequestNow

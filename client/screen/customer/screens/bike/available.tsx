@@ -53,7 +53,7 @@ const BikeAvailable = ({
                                         name: BikeNavigation.Request.name,
                                         bikeId: bike.id
                                     })}
-                                    title="Request Now"
+                                    title="Rent Now"
                                 />
                             </BikeCard>
                         })
