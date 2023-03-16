@@ -47,8 +47,8 @@ const CustomerMap = () => {
                         latitude: +store.latitude,
                         longitude: +store.longitude
                     }}
-                            strokeColor={store.scopeEdgeColor}
-                            fillColor={store.scopeColor}
+                            strokeColor={'red'}
+                            fillColor={'rgba(0, 255, 0, 0.35)'}
                             radius={+store.radius}
                     />
                 </MapView>

@@ -16,8 +16,8 @@ const Login = ({
                }: any) => {
 
     const [cred, setCred] = useState<UserLogin>({
-        username: 'customer@email.com',
-        password: 'erikbikeshop'
+        username: '',
+        password: ''
     });
     const [error,setError] = useState<string>('');
 
@@ -28,7 +28,7 @@ const Login = ({
     }
 
     useEffect(() => {
-        _handleLogin().then(ignored=> {})
+
     }, [])
 
 
