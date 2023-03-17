@@ -1,17 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {View,  ScrollView} from "react-native";
+import {View, ScrollView, StyleSheet} from "react-native";
 import {BikeObject} from "../../../../../../.types/bike";
 import {getBikeAvailable, getBikeByCustomer, getBikeData, requestBikeByCustomer} from "../../../../../../.api/bike-api";
-import {Button, Card,Text} from "@rneui/themed";
+import {Button, Card, Text} from "@rneui/themed";
 import {defaultBikeLogo} from "../../../../../../image";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import {formatDate, formatDateWithTime} from "../../../../../../utils/date";
+import {formatDateWithTime} from "../../../../../../utils/date";
 import moment from "moment";
 import {getBikeStatus} from "../../../../../../utils/bike";
 import * as DocumentPicker from 'expo-document-picker';
 import {success} from "../../../../../../style";
-import {uploadToS3} from "../../../../../../.api/aws/s3";
-import {handleUploadReceiptCustomer} from "../../../../../../.api/customer-api";
 
 const RequestNow = ({route, navigation}: any) => {
     const {bikeId, setBikes, setPage, setBikeRequested} = route.params;
@@ -58,13 +56,13 @@ const RequestNow = ({route, navigation}: any) => {
 
         setTotalHours(totalHour)
         setEstimatedPrice(totalHour * bike.price)
-    }, [dateStart, dateEnd, timeEnd,timeStart])
+    }, [dateStart, dateEnd, timeEnd, timeStart])
 
     const _handleRequestBike = async () => {
         let success = false;
         bike.startBarrow = dateStart;
         bike.endBarrow = dateEnd;
-        await requestBikeByCustomer(bike).then(bike => {
+        await requestBikeByCustomer(bike).then(ignored => {
             success = true
             getBikeAvailable('', 1, 10).then(bikes => {
                 setPage(1);
@@ -87,7 +85,7 @@ const RequestNow = ({route, navigation}: any) => {
         })
 
 
-        if(success){
+        if (success) {
             alert('Bike rent request success');
         }
         // will uncomment if answer find
@@ -117,17 +115,17 @@ const RequestNow = ({route, navigation}: any) => {
         if (index === 1) {
             setTimeStartOpen(false);
             setTimeStart(date)
-            let tempDateStart:Date|undefined = dateStart;
-            tempDateStart?.setHours(date?.getHours()? date?.getHours(): 12);
-            tempDateStart?.setMinutes(date?.getMinutes()? date?.getMinutes(): 0);
+            let tempDateStart: Date | undefined = dateStart;
+            tempDateStart?.setHours(date?.getHours() ? date?.getHours() : 12);
+            tempDateStart?.setMinutes(date?.getMinutes() ? date?.getMinutes() : 0);
             setDateStart(tempDateStart);
 
         } else {
             setTimeEnd(date);
             setTimeEndOpen(false)
-            let tempDateEnd:Date|undefined = dateEnd;
-            tempDateEnd?.setHours(date?.getHours()? date?.getHours(): 12);
-            tempDateEnd?.setMinutes(date?.getMinutes()? date?.getMinutes(): 0);
+            let tempDateEnd: Date | undefined = dateEnd;
+            tempDateEnd?.setHours(date?.getHours() ? date?.getHours() : 12);
+            tempDateEnd?.setMinutes(date?.getMinutes() ? date?.getMinutes() : 0);
             setDateEnd(tempDateEnd);
         }
 
@@ -141,7 +139,7 @@ const RequestNow = ({route, navigation}: any) => {
         setReceipt(result);
     }
 
-    return <ScrollView style={{flex: 1}}>
+    return <ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
 
         <View style={{
             marginBottom: 20
@@ -150,12 +148,6 @@ const RequestNow = ({route, navigation}: any) => {
                 marginTop: 10,
                 alignItems: 'center'
             }}>
-                <Text style={{
-                    fontWeight: 'bold',
-                    fontSize: 20
-                }}>
-                    Bike Request From
-                </Text>
             </View>
             <Card>
                 <Card.Title style={
@@ -164,8 +156,17 @@ const RequestNow = ({route, navigation}: any) => {
                         textTransform: 'capitalize',
                         fontSize: 20,
                         color: 'black'
-                    }}>{`${bike.brand} (${bike.price}₱/hr)`}</Card.Title>
+                    }}>
+                    {`${bike.brand} (${bike.price}₱/hr)`}
+                </Card.Title>
                 <Card.Divider/>
+                <Card.Title style={
+                    {
+                        fontSize: 15,
+                        color: 'black'
+                    }}>
+                    {`QTY: ${bike.quantity}`}
+                </Card.Title>
                 <Card.Image
                     style={{padding: 0}}
                     source={bike?.bikePictures.length === 0 ? defaultBikeLogo : {
@@ -177,7 +178,6 @@ const RequestNow = ({route, navigation}: any) => {
                         bike?.description
                     }
                 </Text>
-
             </Card>
         </View>
 
@@ -197,17 +197,17 @@ const RequestNow = ({route, navigation}: any) => {
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
-                <View style={{ flexDirection: 'row', display: 'flex',justifyContent: 'space-between'}}>
+                <View style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
                     <View style={{marginRight: 10}}>
-                        <Button onPress={() => setDateStartOpen(true)}>
+                        <Button titleStyle={styles.buttonTitle} onPress={() => setDateStartOpen(true)}>
                             Date Start
                         </Button>
                     </View>
-                   <View>
-                       <Button onPress={() => setTimeStartOpen(true)}>
-                           Time Start
-                       </Button>
-                   </View>
+                    <View>
+                        <Button titleStyle={styles.buttonTitle} onPress={() => setTimeStartOpen(true)}>
+                            Time Start
+                        </Button>
+                    </View>
                 </View>
                 {
                     !dateStartOpen ? null
@@ -220,7 +220,7 @@ const RequestNow = ({route, navigation}: any) => {
                 {
                     !timeStartOpen ? null
                         :
-                        <RNDateTimePicker mode="time"  value={new Date()}
+                        <RNDateTimePicker mode="time" value={timeStart}
                                           minimumDate={new Date()}
                                           onChange={(event, date) => _handleChangeTimeStart(event, date, 1)}/>
                 }
@@ -238,15 +238,15 @@ const RequestNow = ({route, navigation}: any) => {
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
-                <View style={{ flexDirection: 'row', display: 'flex',justifyContent: 'space-between'}}>
-                    <View style={{marginRight: 10}}>
-                        <Button onPress={() => setDateEndOpen(true)} >
+                <View style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
+                    <View style={{marginRight: 10, width: 75}}>
+                        <Button titleStyle={styles.buttonTitle} onPress={() => setDateEndOpen(true)}>
                             Date End
                         </Button>
                     </View>
 
-                    <View>
-                        <Button onPress={() => setTimeEndOpen(true)}>
+                    <View style={{width: 75}}>
+                        <Button titleStyle={styles.buttonTitle} onPress={() => setTimeEndOpen(true)}>
                             Time End
                         </Button>
                     </View>
@@ -259,7 +259,7 @@ const RequestNow = ({route, navigation}: any) => {
                 }
                 {
                     timeEndOpen ? <RNDateTimePicker mode={'time'}
-                                                    value={new Date()}
+                                                    value={timeEnd}
                                                     minimumDate={new Date()}
                                                     onChange={(event, date) => _handleChangeTimeStart(event, date, 2)}
 
@@ -303,7 +303,7 @@ const RequestNow = ({route, navigation}: any) => {
                 {
                     receipt ? <Text style={{
                             fontWeight: 'bold',
-                                color: 'green',
+                            color: 'green',
                             fontSize: 20
                         }}>
                             {receipt.name}
@@ -317,22 +317,25 @@ const RequestNow = ({route, navigation}: any) => {
                 }
 
             </View>
-            <View style={{marginBottom: 10}}>
-                <Button onPress={_uploadReceipt} color={success}>
+            <View style={{marginBottom: 10, display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
+                <Button style={{width: '50%'}} onPress={_uploadReceipt}>
                     {
-                        receipt? 'Change Receipt':'Attached Receipt'
+                        receipt ? 'Change Receipt' : 'Attached Receipt'
                     }
                 </Button>
+                <Button style={{width: '50%'}} onPress={_handleRequestBike} color={success}>
+                    Rent Now
+                </Button>
             </View>
-
         </ScrollView>
-        <View>
-            <Button onPress={_handleRequestBike}>
-                Rent Now
-            </Button>
-        </View>
 
     </ScrollView>
 }
+const styles = StyleSheet.create({
+    buttonTitle: {
+        color: "white",
+        fontSize: 12,
+    }
+});
 
 export default RequestNow

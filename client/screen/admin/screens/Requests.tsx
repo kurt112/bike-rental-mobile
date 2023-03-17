@@ -10,7 +10,7 @@ import NoBikeAvailable from "../../utils/NoBikeAvailable";
 import styles from "../../style/style";
 import {danger, info, primary, success} from "../../../../style";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
+import {formatDateWithTime} from "../../../../utils/date";
 const Requests = ({
                       navigation
                   }: any) => {
@@ -20,14 +20,14 @@ const Requests = ({
     const [isLoadMoreVisible, setIsLoadMoreVisible] = useState(true)
 
     useEffect(() => {
-        getBikes('', page, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
+        getBikes('', 1, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
             setBikes(bikes)
             setPage(page + 1)
         })
     }, [])
 
     const _handleLastPage = async () => {
-        await getBikes('', page, 10, getBikeStatus.FOR_REQUEST).then(newBikes => {
+        await getBikes('', 1, 10, getBikeStatus.FOR_REQUEST).then(newBikes => {
             if (newBikes.length === 0) {
                 setIsLoadMoreVisible(false);
                 return;
@@ -47,7 +47,7 @@ const Requests = ({
                 text: 'Yes',
                 onPress: () => {
                     handleRejectBikeRequestBYCustomer(userId, bikeId).then(ignored => {
-                        getBikes('', 1, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
+                        getBikes('', page, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
                             setBikes(bikes)
                             setPage(1)
                         })
@@ -85,10 +85,30 @@ const Requests = ({
                         <NoBikeAvailable/>
                         :
                         bikes.map((bike: any) => {
+                        console.log(bike);
                             const {assignedCustomer} = bike;
                             const {user} = assignedCustomer;
                             const {firstName, lastName, validIdPhoto} = user
                             return <BikeCard bike={bike} key={bike.id}>
+                              <View style={{
+                                                                borderTopWidth: .5,
+                                                                borderColor: 'grey',
+                                                                paddingTop: 10,
+                                                                paddingBottom: 10
+                                                            }}>
+
+                                    <View style={{display: 'flex',justifyContent: 'space-between',flexDirection: 'row'}}>
+                                    <Text style={{fontWeight: 'bold', fontSize: 15}}>Rent Start: </Text>
+                                    <Text style={{fontWeight: 'bold', fontSize: 15}}>{formatDateWithTime(bike.startBarrow)} </Text>
+                                    </View>
+                                    <View style={{display: 'flex',
+                                      justifyContent: 'space-between',
+                                      flexDirection: 'row'
+                                      }}>
+                                      <Text style={{fontWeight: 'bold', fontSize: 15}}>Rent End: </Text>
+                                      <Text style={{fontWeight: 'bold', fontSize: 15}}>{formatDateWithTime(bike.endBarrow)} </Text>
+                                    </View>
+                                 </View>
                                 <View style={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
