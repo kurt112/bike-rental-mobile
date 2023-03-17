@@ -27,11 +27,6 @@ const Login = ({
         setCred(newCred)
     }
 
-    useEffect(() => {
-
-    }, [])
-
-
     const _handleLogin = async () => {
         await axiosSubmit.post(`${path.auth}/login`, cred).then(result => {
             const {data} = result;

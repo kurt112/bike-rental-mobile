@@ -23,6 +23,7 @@ const CustomerMap = () => {
             }).catch(error => {
             })
         }
+
     }, [])
     return <View style={styles.container}>
         {

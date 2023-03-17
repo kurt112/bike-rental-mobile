@@ -48,7 +48,7 @@ const CustomerProfile = ({
             <Avatar
                 size={64}
                 rounded
-                title="Rd"
+                title={`${user.firstName || user.firstName.length > 0 ? user.firstName[0].toUpperCase():'E'}${user.lastName ||user.lastName.length > 0 ? user.lastName[0].toUpperCase():'B'}`}
                 containerStyle={{backgroundColor: 'indigo'}}
             >
                 <Avatar.Accessory size={25} onPress={() => setIsEdit(true)}/>
@@ -73,17 +73,17 @@ const CustomerProfile = ({
             >
                 <Tab.Item
                     title="Personal Info"
-                    titleStyle={{fontSize: 14}}
+                    titleStyle={{fontSize: 12}}
                     icon={{name: 'help-circle-outline', type: 'ionicon', color: 'white'}}
                 />
                 <Tab.Item
                     title="Actions"
-                    titleStyle={{fontSize: 14}}
+                    titleStyle={{fontSize: 12}}
                     icon={{name: 'hammer-outline', type: 'ionicon', color: 'white'}}
                 />
                 <Tab.Item
                     title="Notifications"
-                    titleStyle={{fontSize: 14}}
+                    titleStyle={{fontSize: 12}}
                     icon={{name: 'notifications-circle-outline', type: 'ionicon', color: 'white'}}
                 />
                 {/*<Tab.Item*/}

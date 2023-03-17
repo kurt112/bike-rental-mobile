@@ -5,7 +5,7 @@ import {getBikeAvailable, getBikeByCustomer, getBikeData, requestBikeByCustomer}
 import {Button, Card,Text} from "@rneui/themed";
 import {defaultBikeLogo} from "../../../../../../image";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import {formatDate} from "../../../../../../utils/date";
+import {formatDate, formatDateWithTime} from "../../../../../../utils/date";
 import moment from "moment";
 import {getBikeStatus} from "../../../../../../utils/bike";
 import * as DocumentPicker from 'expo-document-picker';
@@ -18,9 +18,13 @@ const RequestNow = ({route, navigation}: any) => {
     const [estimatedPrice, setEstimatedPrice] = useState<number>(0);
     const [totalHours, setTotalHours] = useState(0);
     const [dateStartOpen, setDateStartOpen] = useState(false);
-    const [dateEndOpen, setDateEndOpen] = useState(false)
+    const [dateEndOpen, setDateEndOpen] = useState(false);
+    const [timeStartOpen, setTimeStartOpen] = useState(false);
+    const [timeEndOpen, setTimeEndOpen] = useState(false)
     const [dateStart, setDateStart] = useState<Date | undefined>(new Date());
     const [dateEnd, setDateEnd] = useState<Date | undefined>(new Date());
+    const [timeStart, setTimeStart] = useState<Date | undefined>(new Date());
+    const [timeEnd, setTimeEnd] = useState<Date | undefined>(new Date());
     const [receipt, setReceipt] = useState<any>();
 
     const [bike, setBike] = useState<BikeObject>({
@@ -54,7 +58,7 @@ const RequestNow = ({route, navigation}: any) => {
 
         setTotalHours(totalHour)
         setEstimatedPrice(totalHour * bike.price)
-    }, [dateStart, dateEnd])
+    }, [dateStart, dateEnd, timeEnd,timeStart])
 
     const _handleRequestBike = async () => {
         let success = false;
@@ -106,6 +110,27 @@ const RequestNow = ({route, navigation}: any) => {
             setDateEnd(date);
             setDateEndOpen(false)
         }
+    }
+
+    const _handleChangeTimeStart = (e: any, date: Date | undefined, index: number) => {
+        // index === 1 means start
+        if (index === 1) {
+            setTimeStartOpen(false);
+            setTimeStart(date)
+            let tempDateStart:Date|undefined = dateStart;
+            tempDateStart?.setHours(date?.getHours()? date?.getHours(): 12);
+            tempDateStart?.setMinutes(date?.getMinutes()? date?.getMinutes(): 0);
+            setDateStart(tempDateStart);
+
+        } else {
+            setTimeEnd(date);
+            setTimeEndOpen(false)
+            let tempDateEnd:Date|undefined = dateEnd;
+            tempDateEnd?.setHours(date?.getHours()? date?.getHours(): 12);
+            tempDateEnd?.setMinutes(date?.getMinutes()? date?.getMinutes(): 0);
+            setDateEnd(tempDateEnd);
+        }
+
     }
 
 
@@ -172,10 +197,17 @@ const RequestNow = ({route, navigation}: any) => {
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
-                <View style={{width: '30%'}}>
-                    <Button onPress={() => setDateStartOpen(true)}>
-                        Date Start
-                    </Button>
+                <View style={{ flexDirection: 'row', display: 'flex',justifyContent: 'space-between'}}>
+                    <View style={{marginRight: 10}}>
+                        <Button onPress={() => setDateStartOpen(true)}>
+                            Date Start
+                        </Button>
+                    </View>
+                   <View>
+                       <Button onPress={() => setTimeStartOpen(true)}>
+                           Time Start
+                       </Button>
+                   </View>
                 </View>
                 {
                     !dateStartOpen ? null
@@ -185,12 +217,20 @@ const RequestNow = ({route, navigation}: any) => {
                                           minimumDate={new Date()} value={dateStart ? dateStart : new Date()}
                         />
                 }
+                {
+                    !timeStartOpen ? null
+                        :
+                        <RNDateTimePicker mode="time"  value={new Date()}
+                                          minimumDate={new Date()}
+                                          onChange={(event, date) => _handleChangeTimeStart(event, date, 1)}/>
+                }
                 <View>
                     <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                        {formatDate(dateStart)}
+                        {formatDateWithTime(dateStart)}
                     </Text>
                 </View>
             </View>
+
             <View style={{
                 marginBottom: 10,
                 display: 'flex',
@@ -198,10 +238,18 @@ const RequestNow = ({route, navigation}: any) => {
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
-                <View style={{width: '30%'}}>
-                    <Button onPress={() => setDateEndOpen(true)}>
-                        Date End
-                    </Button>
+                <View style={{ flexDirection: 'row', display: 'flex',justifyContent: 'space-between'}}>
+                    <View style={{marginRight: 10}}>
+                        <Button onPress={() => setDateEndOpen(true)} >
+                            Date End
+                        </Button>
+                    </View>
+
+                    <View>
+                        <Button onPress={() => setTimeEndOpen(true)}>
+                            Time End
+                        </Button>
+                    </View>
                 </View>
                 {
                     dateEndOpen ? <RNDateTimePicker mode={'date'}
@@ -209,9 +257,17 @@ const RequestNow = ({route, navigation}: any) => {
                                                     onChange={(event, date) => _handleChangeDateStart(event, date, 2)}
                     /> : null
                 }
+                {
+                    timeEndOpen ? <RNDateTimePicker mode={'time'}
+                                                    value={new Date()}
+                                                    minimumDate={new Date()}
+                                                    onChange={(event, date) => _handleChangeTimeStart(event, date, 2)}
+
+                    /> : null
+                }
                 <View>
                     <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                        {formatDate(dateEnd)}
+                        {formatDateWithTime(dateEnd)}
                     </Text>
                 </View>
             </View>
