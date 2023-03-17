@@ -112,7 +112,7 @@ export const getBikes = async (search: any, page: any, size: any, status: any) =
 }
 
 export const getBikeByCustomerWithLocation = async (search: any) => {
-    const token = localStorage.getItem('token')
+    const token = await AsyncStorage.getItem('token');
     const query = () => {
         return {
             query: `query{
@@ -239,4 +239,17 @@ export const handleRejectBikeRequestBYCustomer = async (userId: string, bikeId: 
     params.append("bikeId", bikeId);
 
     return await axiosCreate.post("bike/request/rejected", params).then(ignored => {});
+}
+
+export const updateBikeLocationByCustomer = async (lat:string,lng: string) => {
+    const token = await AsyncStorage.getItem('token');
+
+    if(token === undefined || token === null    ) return;
+
+    const params = new URLSearchParams();
+    params.append("lat", lat);
+    params.append("lng", lng);
+    params.append("token", token);
+
+    await axiosCreate.post("bike/update/location", params).then(ignored => {});
 }

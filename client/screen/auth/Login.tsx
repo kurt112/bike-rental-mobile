@@ -16,8 +16,8 @@ const Login = ({
                }: any) => {
 
     const [cred, setCred] = useState<UserLogin>({
-        username: '',
-        password: ''
+        username: 'customer@email.com',
+        password: 'erikbikeshop'
     });
     const [error,setError] = useState<string>('');
 
@@ -26,6 +26,10 @@ const Login = ({
         newCred[key] = value;
         setCred(newCred)
     }
+
+    useEffect(() => {
+        _handleLogin().then(ignored => {})
+    }, [])
 
     const _handleLogin = async () => {
         await axiosSubmit.post(`${path.auth}/login`, cred).then(result => {

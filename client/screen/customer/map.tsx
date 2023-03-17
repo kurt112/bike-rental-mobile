@@ -1,10 +1,14 @@
-import {Dimensions, StyleSheet, View, Text} from "react-native";
-import React, {useEffect, useState} from "react";
-import MapView, {Circle, Marker} from "react-native-maps";
+import {StyleSheet, View, Text} from "react-native";
+import React, {useEffect, useState} from "react"
 import {getStoreData} from "../../../.api/store-api";
 import {Store} from "../../../.types/store";
-
+import * as Location from "expo-location";
+import {getBikeByCustomerWithLocation, updateBikeLocationByCustomer} from "../../../.api/bike-api";
+import MapView from "./screens/Map";
+import Map from "./screens/Map";
 const CustomerMap = () => {
+    const [location, setLocation] = useState<any>(null);
+    const [errorMsg, setErrorMsg] = useState<any>(null);
     const [store, setStore] = useState<Store>({
         id: '',
         latitude: '',
@@ -23,36 +27,41 @@ const CustomerMap = () => {
             }).catch(error => {
             })
         }
-
     }, [])
+    useEffect(() => {
+        const interval = setInterval(() => {
+            console.log('updating location')
+            // getBikeByCustomerWithLocation('').then(bikeResult => {
+            //
+            // })
+            setCurrentLocation().then();
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+       if(location){
+           updateBikeLocationByCustomer(location.latitude, location.longitude).then(ignored => {
+           }).catch(ignored => {
+               alert('Please turn on you gps')
+           })
+       }
+    }, [location])
+
+    const setCurrentLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+        }
+        let location = await Location.getCurrentPositionAsync({});
+
+        setLocation(location.coords);
+    };
     return <View style={styles.container}>
         {
             store.id === '' ?
-                <Text>No Data Found</Text> :
-
-                <MapView style={styles.map}
-                         initialRegion={{
-                             latitude: +store.latitude,
-                             longitude: +store.longitude,
-                             latitudeDelta: 0.0922,
-                             longitudeDelta: 0.0421,
-                         }}
-                         showsCompass={true}
-                >
-                    <Marker
-                        coordinate={{latitude: +store.latitude, longitude: +store.longitude}}
-                        title={store.name}
-                        description={store.name}
-                    />
-                    <Circle center={{
-                        latitude: +store.latitude,
-                        longitude: +store.longitude
-                    }}
-                            strokeColor={'red'}
-                            fillColor={'rgba(0, 255, 0, 0.35)'}
-                            radius={+store.radius}
-                    />
-                </MapView>
+                <Text>No Data Found</Text> : <Map store={store} location={location}/>
         }
 
     </View>
@@ -63,11 +72,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    map: {
-        width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height,
-        flex: 1,
-    },
+    }
 });
 export default CustomerMap
