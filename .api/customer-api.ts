@@ -4,7 +4,7 @@ import {CustomerCreate} from "../.types/customer";
 import {UserValidationMessage} from "../.types/user";
 import {path} from '../utils/api/endpoint'
 import {  URLSearchParams } from 'react-native-url-polyfill';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 /*export const handleSubmitCustomer = async (customer:CustomerCreate) => {
     return await axiosSubmit.post(path.customer,customer).then(ignored => {
         return Swal.fire(
@@ -220,7 +220,7 @@ export const validateCustomer = (validation: UserValidationMessage, customer: Cu
 }
 
 export const checkIfUserIsRenting = async () => {
-    const token = localStorage.getItem('token')
+    const token = await AsyncStorage.getItem('token')
 
     const {data} = await axiosSubmit.get(path.customer+'/'+token+'/isRenting').then(data => {
         if(!data.data) return 0;

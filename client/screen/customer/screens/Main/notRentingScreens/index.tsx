@@ -8,6 +8,7 @@ import {getBikeAvailable, getBikeByCustomer} from "../../../../../../.api/bike-a
 import {getBikeStatus} from "../../../../../../utils/bike";
 import {BikeObject} from "../../../../../../.types/bike";
 import {LogBox} from "react-native";
+import { RFPercentage } from "react-native-responsive-fontsize";
 const Tab = createBottomTabNavigator();
 const NotRentingScreens = (props:any) => {
     LogBox.ignoreLogs([
@@ -57,7 +58,7 @@ const NotRentingScreens = (props:any) => {
 
 
                         // You can return any component that you like here!
-                        return <Ionicons name={`${iconName}`} size={30} color={'white'} />;
+                        return <Ionicons name={`${iconName}`} size={RFPercentage(3.5)} style={{fontSize: RFPercentage(4)}} color={'white'} />;
                     },
                     tabBarActiveTintColor: 'white',
                     tabBarInactiveTintColor: 'white',

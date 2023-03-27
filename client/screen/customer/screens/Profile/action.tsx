@@ -1,32 +1,34 @@
-import {Fragment} from "react";
+import {Fragment, useEffect, useState} from "react";
 import {StyleSheet, View} from "react-native";
 import {Button} from "@rneui/themed";
 import AuthNavigation from "../../../../../navigation/Auth";
-import {success} from "../../../../../style";
+import {danger, faded, info, success} from "../../../../../style";
 import { RFPercentage } from "react-native-responsive-fontsize";
-
+import {checkIfUserIsRenting} from '../../../../../.api/customer-api'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const ClientAction = ({
                           navigation
                       }: any) => {
-    const _handleChangePass = () => {
-        alert('to be implemented task by joselito')
+                        
+    useEffect(() => {
+        setup().then(ignored => {})
+    }, []);
+
+    const setup = async () => {
+        const isCustomer = await AsyncStorage.getItem('userRole')
+        const isRenting = await AsyncStorage.getItem('isRenting')
     }
+
+    
     return <Fragment>
         <View style={styles.buttonContainer}>
-            <Button size="md" color='error' style={styles.button}
+            <View style={{marginTop: 10}}></View>
+            <Button size="md" color={danger} style={styles.button}
                     onPress={() => navigation.navigate(AuthNavigation.Login.name, {name: AuthNavigation.Login.name})}
                     titleStyle={{fontSize: RFPercentage(2.5)}}
                     containerStyle={{width: RFPercentage(50)}}
                     >
                 Logout
-            </Button>
-            <View style={{marginTop: 10}}></View>
-            <Button size="md" color={success} style={styles.button}
-                    titleStyle={{fontSize: RFPercentage(2.5)}}
-                    onPress={_handleChangePass}
-                    containerStyle={{width: RFPercentage(50)}}
-                    >
-                Change Password
             </Button>
         </View>
     </Fragment>

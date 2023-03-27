@@ -29,29 +29,32 @@ const Login = ({
     }
 
     const _handleLogin = async () => {
-        console.log('pressing');
-        
-        await axiosSubmit.post(`${path.auth}/login`, cred).then(result => {
-            console.log('wew');
-            
+        await axiosSubmit.post(`${path.auth}/login`, cred).then(result => {            
             const {data} = result;
             const {token, user} = data;
-            AsyncStorage.setItem(
-                'user',
-                JSON.stringify(user)
-            );
-            AsyncStorage.setItem(
-                'token',
-                token
-            );
-            AsyncStorage.setItem(
-                'userID',
-                user.id.toString()
-            );
-            AsyncStorage.setItem(
-                'isRenting',
-                user.isRenting.toString()
-            );
+
+            async () => {
+                await AsyncStorage.setItem(
+                    'user',
+                    JSON.stringify(user)
+                );
+                await AsyncStorage.setItem(
+                    'token',
+                    token
+                );
+                await AsyncStorage.setItem(
+                    'userID',
+                    user.id.toString()
+                );
+                await AsyncStorage.setItem(
+                    'isRenting',
+                    user.isRenting.toString()
+                );
+                await AsyncStorage.setItem(
+                    'userRole',
+                    user.userRole
+                );    
+            }
 
             if(user.userRole === 'customer'){
                 navigation.navigate('Customer Screen', {name: 'Customer Screen'})
@@ -77,11 +80,9 @@ const Login = ({
 
             alert(data.message);
         }).finally(() => {
-            console.log('hotdo');
+            
             
         })
-
-
     }
 
 

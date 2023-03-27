@@ -54,6 +54,7 @@ const BikeAvailable = ({
                                         name: BikeNavigation.Request.name,
                                         bikeId: bike.id
                                     })}
+                                    titleStyle={{fontSize: RFPercentage(2)}}
                                     title="Rent Now"
                                 />
                             </BikeCard>
