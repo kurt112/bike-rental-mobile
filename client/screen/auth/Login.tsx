@@ -19,6 +19,7 @@ const Login = ({
         username: '',
         password: ''
     });
+
     const [error,setError] = useState<string>('');
 
     const handlerChange = (value: string, key:string) => {
@@ -28,7 +29,11 @@ const Login = ({
     }
 
     const _handleLogin = async () => {
+        console.log('pressing');
+        
         await axiosSubmit.post(`${path.auth}/login`, cred).then(result => {
+            console.log('wew');
+            
             const {data} = result;
             const {token, user} = data;
             AsyncStorage.setItem(
@@ -63,6 +68,8 @@ const Login = ({
                 password: ''
             })
         }).catch(error => {
+            console.log('i ahve error');
+            
             console.log(error);
             const {data} = error.response;
 
@@ -70,7 +77,8 @@ const Login = ({
 
             alert(data.message);
         }).finally(() => {
-
+            console.log('hotdo');
+            
         })
 
 

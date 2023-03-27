@@ -4,6 +4,7 @@ import {Text} from "@rneui/themed";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {getNotifications} from "../../../../../.api/notification-api";
 import {getFromNowDate} from "../../../../../utils/date";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const NotificationScreen = () => {
 
@@ -20,14 +21,14 @@ const NotificationScreen = () => {
                 notifications.map((notification: any) => {
                     return <View style={styles.container} key={notification.id}>
                         <View style={styles.notificationIcon}>
-                            <Ionicons name={`md-person`} size={30} color={'#039BE5'} />
+                            <Ionicons name={`md-person`} size={RFPercentage(4)} color={'#039BE5'} />
                         </View>
                         <View>
                             <View style={{display: 'flex', flexDirection:'row'}}>
-                                <Text style={{fontWeight: 'bold', fontSize: 15, textTransform: 'capitalize', marginRight: 5}}>{`${notification.from.firstName} ${notification.from.lastName}`}</Text>
-                                <Text>{notification.message}</Text>
+                                <Text style={{fontWeight: 'bold', fontSize: RFPercentage(2), textTransform: 'capitalize', marginRight: 5}}>{`${notification.from.firstName} ${notification.from.lastName}`}</Text>
+                                <Text style={{fontSize: RFPercentage(2)}}>{notification.message}</Text>
                             </View>
-                            <Text>{getFromNowDate(notification.createdAt)}</Text>
+                            <Text style={{fontSize: RFPercentage(1.5)}}>{getFromNowDate(notification.createdAt)}</Text>
                         </View>
                     </View>
                 })

@@ -11,6 +11,7 @@ import styles from "../../style/style";
 import {danger, info, primary, success} from "../../../../style";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {formatDateWithTime} from "../../../../utils/date";
+import { RFPercentage } from "react-native-responsive-fontsize";
 const Requests = ({
                       navigation
                   }: any) => {
@@ -20,14 +21,14 @@ const Requests = ({
     const [isLoadMoreVisible, setIsLoadMoreVisible] = useState(true)
 
     useEffect(() => {
-        getBikes('', 1, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
+        getBikes('', page, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
             setBikes(bikes)
             setPage(page + 1)
         })
     }, [])
 
     const _handleLastPage = async () => {
-        await getBikes('', 1, 10, getBikeStatus.FOR_REQUEST).then(newBikes => {
+        await getBikes('', page, 10, getBikeStatus.FOR_REQUEST).then(newBikes => {
             if (newBikes.length === 0) {
                 setIsLoadMoreVisible(false);
                 return;
@@ -164,6 +165,7 @@ const Requests = ({
                     <Button containerStyle={{
                         width: '100%'
                     }}
+                    titleStyle={{fontSize: RFPercentage(2.5)}}
                             title="Load More"
                             type="clear"
                             onPress={_handleLastPage}

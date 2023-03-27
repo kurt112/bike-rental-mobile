@@ -6,6 +6,7 @@ import ClientAction from "./action";
 import NotificationScreen from "./notification";
 import {getUserDataByToken} from "../../../../../.api/user-api";
 import {UserCreate} from "../../../../../.types/user";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const CustomerProfile = ({
                              navigation
@@ -46,12 +47,12 @@ const CustomerProfile = ({
     return (
         <View style={styles.container}>
             <Avatar
-                size={64}
+                size={RFPercentage(10)}
                 rounded
                 title={`${user.firstName || user.firstName.length > 0 ? user.firstName[0].toUpperCase():'E'}${user.lastName ||user.lastName.length > 0 ? user.lastName[0].toUpperCase():'B'}`}
                 containerStyle={{backgroundColor: 'indigo'}}
             >
-                <Avatar.Accessory size={25} onPress={() => setIsEdit(true)}/>
+                <Avatar.Accessory size={RFPercentage(3.5)} onPress={() => setIsEdit(true)}/>
             </Avatar>
 
             <View style={styles.nameContainer}>
@@ -73,18 +74,18 @@ const CustomerProfile = ({
             >
                 <Tab.Item
                     title="Personal Info"
-                    titleStyle={{fontSize: 12}}
-                    icon={{name: 'help-circle-outline', type: 'ionicon', color: 'white'}}
+                    titleStyle={{fontSize: RFPercentage(1.5)}}
+                    icon={{name: 'help-circle-outline', type: 'ionicon', color: 'white', size: RFPercentage(4)}}
                 />
                 <Tab.Item
                     title="Actions"
-                    titleStyle={{fontSize: 12}}
-                    icon={{name: 'hammer-outline', type: 'ionicon', color: 'white'}}
+                    titleStyle={{fontSize: RFPercentage(1.5)}}
+                    icon={{name: 'hammer-outline', type: 'ionicon', color: 'white',size: RFPercentage(4)}}
                 />
                 <Tab.Item
                     title="Notifications"
-                    titleStyle={{fontSize: 12}}
-                    icon={{name: 'notifications-circle-outline', type: 'ionicon', color: 'white'}}
+                    titleStyle={{fontSize: RFPercentage(1.5)}}
+                    icon={{name: 'notifications-circle-outline', type: 'ionicon', color: 'white',size: RFPercentage(4)}}
                 />
                 {/*<Tab.Item*/}
                 {/*    title="Profile"*/}
@@ -120,10 +121,10 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     nameContainer: {
-        padding: 10
+        padding: RFPercentage(1)
     },
     displayName: {
-        fontSize: 25,
+        fontSize: RFPercentage(2),
         fontFamily: 'sans-serif-medium'
     }
 });
