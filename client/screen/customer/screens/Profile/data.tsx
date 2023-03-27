@@ -2,6 +2,7 @@ import {Fragment} from "react";
 import {Button, Text} from "@rneui/themed";
 import {StyleSheet, View} from "react-native";
 import {UserCreate} from "../../../../../.types/user";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 interface props {
     user: UserCreate | undefined,
@@ -81,8 +82,26 @@ const UserData = (
             <View style={styles.dataContainer}>
 
 
-                <Button size={'lg'} title='Cancel' color={'error'} />
-                <Button size={'lg'} title='Save' color={'success'}/>
+                <Button titleStyle={{
+                    fontSize: RFPercentage(2)
+                }} 
+                containerStyle={
+                    {
+                        width: RFPercentage(20)
+                    }
+                }
+                title='Cancel' 
+                color={'error'} 
+                />
+                <Button titleStyle={{
+                    fontSize: RFPercentage(2)
+                }} 
+                containerStyle={
+                    {
+                        width: RFPercentage(20)
+                    }
+                }
+                title='Save' color={'success'}/>
             </View>
 
 
@@ -104,10 +123,10 @@ const styles = StyleSheet.create({
     },
     dataTitle: {
         fontWeight: 'bold',
-        fontSize: 15
+        fontSize: RFPercentage(2.5)
     },
     data: {
-        fontSize: 15
+        fontSize: RFPercentage(2.5)
     }
 });
 

@@ -9,6 +9,7 @@ import BikeCard from "../../utils/BikeCard";
 import {Button} from "@rneui/themed";
 import {info, primary, warning} from "../../../../style";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const AdminRented = ({
                          navigation
@@ -18,14 +19,14 @@ const AdminRented = ({
     const [isLoadMoreVisible, setIsLoadMoreVisible] = useState(true)
 
     useEffect(() => {
-        getBikes('', page, 10, getBikeStatus.RENTED).then(bikes => {
+        getBikes('', 1, 10, getBikeStatus.RENTED).then(bikes => {
             setBikes(bikes)
             setPage(page + 1)
         })
     }, [])
 
     const _handleLastPage = async () => {
-        await getBikes('', page, 10, getBikeStatus.RENTED).then(newBikes => {
+        await getBikes('', 1, 10, getBikeStatus.RENTED).then(newBikes => {
             if (newBikes.length === 0) {
                 setIsLoadMoreVisible(false);
                 return;
@@ -84,7 +85,7 @@ const AdminRented = ({
                                         {
                                             bike.customerReceipt === null || bike.customerReceipt.picture === '' ? <Text style={{color: 'red'}}>No Receipt</Text> :
                                                 <Ionicons name="receipt-outline"
-                                                          size={32}
+                                                          size={RFPercentage(4.5)}
                                                           onPress={() => Linking.openURL(`https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike.customerReceipt.picture}`)}
                                                           color={info}
                                                 />
@@ -92,7 +93,7 @@ const AdminRented = ({
                                         {
                                             validIdPhoto === null || validIdPhoto === '' ? <Text style={{color: 'red'}}>No Valid ID</Text> :
                                                 <Ionicons name="person-circle-outline"
-                                                          size={32}
+                                                          size={RFPercentage(4.5)}
                                                           onPress={() => Linking.openURL(`https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${validIdPhoto}`)}
                                                           color={primary}
                                                 />
@@ -105,7 +106,7 @@ const AdminRented = ({
                                         flexDirection: 'row'
                                     }}>
                                         <Ionicons name="stop-circle-outline"
-                                                  size={32}
+                                                  size={RFPercentage(4.5)}
                                                   onPress={() => _handleTerminate(user.id, bike.id)}
                                                   color={warning}
                                         />
@@ -122,6 +123,7 @@ const AdminRented = ({
                     containerStyle={{
                         width: '100%'
                     }}
+                    titleStyle={{fontSize: RFPercentage(2.5)}}
                     title="Load More"
                     type="clear"
                     onPress={_handleLastPage}

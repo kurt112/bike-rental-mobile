@@ -6,6 +6,7 @@ import {getBikeAvailable} from "../../../../../.api/bike-api";
 import BikeNavigation from "../../../../../navigation/Bike";
 import BikeCard from "../../../utils/BikeCard";
 import NoBikeAvailable from "../../../utils/NoBikeAvailable";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const BikeAvailable = ({
                            navigation,
@@ -64,6 +65,7 @@ const BikeAvailable = ({
                         containerStyle={{
                             width: '100%'
                         }}
+                        titleStyle={{fontSize: RFPercentage(2.5)}}
                         title="Load More"
                         type="clear"
                         onPress={_handleLastPage}

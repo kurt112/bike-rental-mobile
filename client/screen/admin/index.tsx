@@ -5,6 +5,7 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import Requests from "./screens/Requests";
 import Rented from "./screens/Rented";
 import AdminMap from "./screens/Map";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const Tab = createBottomTabNavigator();
 const AdminMainScreen = () => {
@@ -34,7 +35,7 @@ const AdminMainScreen = () => {
 
 
                     // You can return any component that you like here!
-                    return <Ionicons name={`${iconName}`} size={30} color={'white'} />;
+                    return <Ionicons name={`${iconName}`} size={RFPercentage(3.5)} color={'white'} style={{fontSize: RFPercentage(4)}}/>;
                 },
                 tabBarActiveTintColor: 'white',
                 tabBarInactiveTintColor: 'white',
