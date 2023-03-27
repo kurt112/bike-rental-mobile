@@ -158,8 +158,6 @@ export const getBikeData = async (id: any) => {
     };
     const {data} = await graphQl.post('', query());
 
-    console.log(data)
-
     return data.data.bikeById;
 }
 
@@ -186,8 +184,6 @@ export const requestBikeByCustomer = async (bike: BikeObject) => {
     const endDate = new Date(bike.endBarrow);
 
     return await axiosCreate.post("bike/request/" + token + "/" + bike.id + '/' + startDate + '/' + endDate, bike).then(newBike => {
-        console.log('lol')
-        console.log(newBike);
     });
 }
 export const cancelRequestBikeByCustomer = async (bikeId: string) => {

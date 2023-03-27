@@ -32,7 +32,6 @@ export const uploadToS3 = async (image: any, bike: any) => {
                 axiosSubmit.post(`bike/${bike.id}/photo/${imageName}`)
             }
         }).catch(error => {
-            console.log(error)
         });
 
 
@@ -42,7 +41,7 @@ export const uploadToS3 = async (image: any, bike: any) => {
 export const deleteToS3 = async (key: string) => {
     const params = {  Bucket: bucketName, Key: key };
     s3.deleteObject(params, function(err) {
-        if (err) console.log(err, err.stack);  // error
-        else     console.log(err);                 // deleted
+        if (err) {}  // error
+        else {}                    // deleted
     });
 }

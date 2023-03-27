@@ -22,12 +22,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const getCustomerBill = async (userId: any) => {
 
     const {data} = await axiosSubmit.get(path.customer+'/'+userId).then(data => {
-        console.log(data);
-
         if(!data.data) return 0;
         return data.data;
     }).catch(error => {
-        console.log(error)
     });
 
     return data;
@@ -96,7 +93,6 @@ export const handleApproveRequestByCustomer = async (userId:string, bikeId: stri
     params.append('userId',userId);
     params.append('bikeId',bikeId);
 
-    console.log(params);
 
     await axiosSubmit.post(`${path.bike}/request/approved`,params).then(ignored => {
         Swal.fire(
@@ -107,7 +103,6 @@ export const handleApproveRequestByCustomer = async (userId:string, bikeId: stri
             location.reload();
         })
     }).catch(error => {
-        console.log(error)
     });
 }
 */
@@ -226,7 +221,6 @@ export const checkIfUserIsRenting = async () => {
         if(!data.data) return 0;
         return data.data;
     }).catch(error => {
-        console.log(error)
     });
 
     return data;
@@ -243,6 +237,5 @@ export const handleUploadReceiptCustomer = async (picture: any) => {
     return await axiosSubmit.post(path.customer+ '/receipt',params).then(data => {
         return data;
     }).catch(error => {
-        console.log(error)
     });
 }

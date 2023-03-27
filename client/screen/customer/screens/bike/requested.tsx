@@ -31,7 +31,6 @@ const BikeRequested = ({
                 setBikes(tempBikeRequested)
             })
         }).catch(error => {
-            console.log(error);
         })
     }
 

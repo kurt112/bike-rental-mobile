@@ -59,7 +59,6 @@ const Login = ({
             if(user.userRole === 'customer'){
                 navigation.navigate('Customer Screen', {name: 'Customer Screen'})
             }else if(user.userRole === 'employee'){
-                console.log('employee')
             }else if(user.userRole === 'admin'){
                 navigation.navigate('Admin Screen', {name: 'Admin Screen'})
             }
@@ -71,9 +70,6 @@ const Login = ({
                 password: ''
             })
         }).catch(error => {
-            console.log('i ahve error');
-            
-            console.log(error);
             const {data} = error.response;
 
             setError(data.message);

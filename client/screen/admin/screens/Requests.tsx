@@ -86,7 +86,6 @@ const Requests = ({
                         <NoBikeAvailable/>
                         :
                         bikes.map((bike: any) => {
-                        console.log(bike);
                             const {assignedCustomer} = bike;
                             const {user} = assignedCustomer;
                             const {firstName, lastName, validIdPhoto} = user

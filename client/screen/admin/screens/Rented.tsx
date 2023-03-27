@@ -55,7 +55,7 @@ const AdminRented = ({
                 },
                 style: 'cancel',
             },
-            {text: 'Cancel', onPress: () => console.log('OK Pressed')},
+            {text: 'Cancel', onPress: () => {}},
         ]);
 
     }
