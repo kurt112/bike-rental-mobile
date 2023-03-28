@@ -1,24 +1,12 @@
-import {Fragment, useEffect, useState} from "react";
+import {Fragment} from "react";
 import {StyleSheet, View} from "react-native";
 import {Button} from "@rneui/themed";
 import AuthNavigation from "../../../../../navigation/Auth";
-import {danger, faded, info, success} from "../../../../../style";
+import {danger} from "../../../../../style";
 import { RFPercentage } from "react-native-responsive-fontsize";
-import {checkIfUserIsRenting} from '../../../../../.api/customer-api'
-import AsyncStorage from "@react-native-async-storage/async-storage";
 const ClientAction = ({
                           navigation
                       }: any) => {
-                        
-    useEffect(() => {
-        setup().then(ignored => {})
-    }, []);
-
-    const setup = async () => {
-        const isCustomer = await AsyncStorage.getItem('userRole')
-        const isRenting = await AsyncStorage.getItem('isRenting')
-    }
-
     
     return <Fragment>
         <View style={styles.buttonContainer}>

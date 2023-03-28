@@ -33,6 +33,9 @@ const Login = ({
             const {data} = result;
             const {token, user} = data;
 
+            console.log(user);
+            
+
             async () => {
                 await AsyncStorage.setItem(
                     'user',
