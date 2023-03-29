@@ -5,6 +5,7 @@ import customerMainScreen from "./client/screen/customer";
 import RequestNow from "./client/screen/customer/screens/bike/action/request-now";
 import BikeNavigation from "./navigation/Bike";
 import AdminMainScreen from "./client/screen/admin";
+import Register from './client/screen/auth/Register';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -18,6 +19,13 @@ export default function App() {
                         title: 'Login',
                         navigationBarHidden: true,
                         headerShown: false
+                    }}
+                />
+                 <Stack.Screen
+                    name={'Register'}
+                    component={Register}
+                    options={{
+                        title: 'Register'
                     }}
                 />
                 <Stack.Screen name="Customer Screen"

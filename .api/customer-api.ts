@@ -239,3 +239,11 @@ export const handleUploadReceiptCustomer = async (picture: any) => {
     }).catch(error => {
     });
 }
+
+export const handleSubmitCustomer = async (customer:CustomerCreate) => {
+    return await axiosSubmit.post(path.customer,customer).then(result => {
+        return result;
+    }).catch(error => {
+        throw error.response.data;
+    });
+}

@@ -4,15 +4,21 @@ import {Button} from "@rneui/themed";
 import AuthNavigation from "../../../../../navigation/Auth";
 import {danger} from "../../../../../style";
 import { RFPercentage } from "react-native-responsive-fontsize";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const ClientAction = ({
                           navigation
                       }: any) => {
     
+    const _handleLogout = async () => {
+        await AsyncStorage.clear()
+        navigation.navigate(AuthNavigation.Login.name, {name: AuthNavigation.Login.name});
+    }
+
     return <Fragment>
         <View style={styles.buttonContainer}>
             <View style={{marginTop: 10}}></View>
             <Button size="md" color={danger} style={styles.button}
-                    onPress={() => navigation.navigate(AuthNavigation.Login.name, {name: AuthNavigation.Login.name})}
+                    onPress={_handleLogout}
                     titleStyle={{fontSize: RFPercentage(2.5)}}
                     containerStyle={{width: RFPercentage(50)}}
                     >

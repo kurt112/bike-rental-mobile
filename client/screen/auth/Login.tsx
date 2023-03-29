@@ -9,6 +9,8 @@ import {UserLogin} from "../../../.types/credential";
 import {axiosSubmit} from "../../../.config/api";
 import { path } from "../../../utils/api/endpoint";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { success } from "../../../style";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 
 const Login = ({
@@ -32,10 +34,6 @@ const Login = ({
         await axiosSubmit.post(`${path.auth}/login`, cred).then(result => {            
             const {data} = result;
             const {token, user} = data;
-
-            console.log(user);
-            
-
             async () => {
                 await AsyncStorage.setItem(
                     'user',
@@ -107,15 +105,24 @@ const Login = ({
         <StatusBar style="auto"/>
         <Button
             title={'Login'}
+            titleStyle={{fontSize: RFPercentage(2)}}
             containerStyle={{
-                width: 200,
+                width: RFPercentage(50),
                 marginHorizontal: 50,
                 marginVertical: 10,
             }}
             onPress={_handleLogin}
-            // onPress={() =>
-            //     navigation.navigate('Your Screen', {name: 'Customer Screen'})
-            // }
+        />
+        <Button
+            title={'Register'}
+            containerStyle={{
+                width: RFPercentage(50),
+                marginHorizontal: 50,
+                marginVertical: 10
+            }}
+            titleStyle={{fontSize: RFPercentage(2)}}
+            style={{backgroundColor: success}}
+            onPress={() => navigation.navigate('Register', {name: 'Register'})}
         />
     </View>
 }
