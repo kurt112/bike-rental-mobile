@@ -34,28 +34,27 @@ const Login = ({
         await axiosSubmit.post(`${path.auth}/login`, cred).then(result => {            
             const {data} = result;
             const {token, user} = data;
-            async () => {
-                await AsyncStorage.setItem(
-                    'user',
-                    JSON.stringify(user)
-                );
-                await AsyncStorage.setItem(
-                    'token',
-                    token
-                );
-                await AsyncStorage.setItem(
-                    'userID',
-                    user.id.toString()
-                );
-                await AsyncStorage.setItem(
-                    'isRenting',
-                    user.isRenting.toString()
-                );
-                await AsyncStorage.setItem(
-                    'userRole',
-                    user.userRole
-                );    
-            }
+                
+             AsyncStorage.setItem(
+                'user',
+                JSON.stringify(user)
+            );
+             AsyncStorage.setItem(
+                'token',
+                token
+            );
+             AsyncStorage.setItem(
+                'userID',
+                user.id.toString()
+            );
+             AsyncStorage.setItem(
+                'isRenting',
+                user.isRenting.toString()
+            );
+             AsyncStorage.setItem(
+                'userRole',
+                user.userRole
+            );    
 
             if(user.userRole === 'customer'){
                 navigation.navigate('Customer Screen', {name: 'Customer Screen'})

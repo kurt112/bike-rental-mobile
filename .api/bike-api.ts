@@ -212,6 +212,8 @@ export const handleTerminateBikeByCustomer = async (userId: string, bikeId: stri
     await axiosCreate.post("bike/terminate", params).then(ignored => {
         alert('Terminate Success')
     }).then(() => {
+        
+    }).catch(error => {
         alert('Terminate Failed')
     });
 }

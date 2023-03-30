@@ -38,7 +38,6 @@ const CustomerProfile = ({
     }, [])
     const fetchData = async () => {
 
-
         await getUserDataByToken().then(result => {
             setUser(result)
         })

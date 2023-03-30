@@ -4,6 +4,8 @@ import { path } from "../utils/api/endpoint";
 
 export const getUserDataByToken = async () => {
     const token = await AsyncStorage.getItem('token');
+    console.log('The token', token);
+    
     const query = () => {
         return {
             query: `query{
