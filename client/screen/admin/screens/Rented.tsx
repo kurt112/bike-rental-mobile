@@ -19,7 +19,7 @@ const AdminRented = ({
     const [isLoadMoreVisible, setIsLoadMoreVisible] = useState(true)
 
     useEffect(() => {
-        getBikes('', 1, 10, getBikeStatus.RENTED).then(bikes => {
+        getBikes('', page, 10, getBikeStatus.RENTED).then(bikes => {
             setBikes(bikes)
             setPage(page + 1)
         })
@@ -47,7 +47,7 @@ const AdminRented = ({
                 text: 'Yes',
                 onPress: () => {
                     handleTerminateBikeByCustomer(userId, bikeId).then(ignored => {
-                        getBikes('', 1, 10, getBikeStatus.RENTED).then(bikes => {
+                        getBikes('', page, 10, getBikeStatus.RENTED).then(bikes => {
                             setBikes(bikes)
                             setPage(1)
                         })
@@ -55,7 +55,7 @@ const AdminRented = ({
                 },
                 style: 'cancel',
             },
-            {text: 'Cancel', onPress: () => console.log('OK Pressed')},
+            {text: 'Cancel', onPress: () => {}},
         ]);
 
     }

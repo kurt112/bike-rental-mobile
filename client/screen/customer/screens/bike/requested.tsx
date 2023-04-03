@@ -7,6 +7,7 @@ import BikeCard from "../../../utils/BikeCard";
 import {cancelRequestBikeByCustomer, getBikeByCustomer} from "../../../../../.api/bike-api";
 import NoBikeAvailable from "../../../utils/NoBikeAvailable";
 import {getBikeStatus} from "../../../../../utils/bike";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 interface props {
     bikes: BikeObject[] | undefined
@@ -30,7 +31,6 @@ const BikeRequested = ({
                 setBikes(tempBikeRequested)
             })
         }).catch(error => {
-            console.log(error);
         })
     }
 
@@ -48,6 +48,7 @@ const BikeRequested = ({
                                         marginRight: 0,
                                         marginBottom: 0,
                                     }}
+                                    titleStyle={{fontSize: RFPercentage(2)}}
                                     title="Cancel"
                                     color={'error'}
                                     onPress={() => _handleCancelBike(bike.id)}

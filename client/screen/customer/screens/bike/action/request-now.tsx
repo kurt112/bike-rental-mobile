@@ -10,6 +10,7 @@ import moment from "moment";
 import {getBikeStatus} from "../../../../../../utils/bike";
 import * as DocumentPicker from 'expo-document-picker';
 import {success} from "../../../../../../style";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const RequestNow = ({route, navigation}: any) => {
     const {bikeId, setBikes, setPage, setBikeRequested} = route.params;
@@ -140,12 +141,10 @@ const RequestNow = ({route, navigation}: any) => {
     }
 
     return <ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
-
         <View style={{
             marginBottom: 20
         }}>
             <View style={{
-                marginTop: 10,
                 alignItems: 'center'
             }}>
             </View>
@@ -154,16 +153,16 @@ const RequestNow = ({route, navigation}: any) => {
                     {
                         fontWeight: 'bold',
                         textTransform: 'capitalize',
-                        fontSize: 20,
+                        fontSize: RFPercentage(2.5),
                         color: 'black'
                     }}>
                     {`${bike.brand} (${bike.price}₱/hr)`}
                 </Card.Title>
-                <Card.Divider/>
                 <Card.Title style={
                     {
-                        fontSize: 15,
-                        color: 'black'
+                        fontSize: RFPercentage(2),
+                        color: 'white',
+                        backgroundColor: '#333'
                     }}>
                     {`QTY: ${bike.quantity}`}
                 </Card.Title>
@@ -173,7 +172,7 @@ const RequestNow = ({route, navigation}: any) => {
                         uri: `https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike?.bikePictures[0].pictureName}`
                     }}
                 />
-                <Text style={{marginBottom: 5, marginTop: 15, textAlign: 'center', fontSize: 15}}>
+                <Text style={{marginBottom: 5, marginTop: 5, textAlign: 'center', fontSize: RFPercentage(3)}}>
                     {
                         bike?.description
                     }
@@ -199,12 +198,12 @@ const RequestNow = ({route, navigation}: any) => {
             }}>
                 <View style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
                     <View style={{marginRight: 10}}>
-                        <Button titleStyle={styles.buttonTitle} onPress={() => setDateStartOpen(true)}>
+                        <Button titleStyle={styles.buttonTitle} containerStyle={styles.buttonSize} onPress={() => setDateStartOpen(true)}>
                             Date Start
                         </Button>
                     </View>
                     <View>
-                        <Button titleStyle={styles.buttonTitle} onPress={() => setTimeStartOpen(true)}>
+                        <Button titleStyle={styles.buttonTitle} containerStyle={styles.buttonSize} onPress={() => setTimeStartOpen(true)}>
                             Time Start
                         </Button>
                     </View>
@@ -225,7 +224,7 @@ const RequestNow = ({route, navigation}: any) => {
                                           onChange={(event, date) => _handleChangeTimeStart(event, date, 1)}/>
                 }
                 <View>
-                    <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                    <Text style={styles.dateFontSize}>
                         {formatDateWithTime(dateStart)}
                     </Text>
                 </View>
@@ -240,13 +239,13 @@ const RequestNow = ({route, navigation}: any) => {
             }}>
                 <View style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
                     <View style={{marginRight: 10, width: 75}}>
-                        <Button titleStyle={styles.buttonTitle} onPress={() => setDateEndOpen(true)}>
+                        <Button titleStyle={styles.buttonTitle} containerStyle={styles.buttonSize} onPress={() => setDateEndOpen(true)}>
                             Date End
                         </Button>
                     </View>
 
-                    <View style={{width: 75}}>
-                        <Button titleStyle={styles.buttonTitle} onPress={() => setTimeEndOpen(true)}>
+                    <View >
+                        <Button titleStyle={styles.buttonTitle} containerStyle={styles.buttonSize} onPress={() => setTimeEndOpen(true)}>
                             Time End
                         </Button>
                     </View>
@@ -266,7 +265,7 @@ const RequestNow = ({route, navigation}: any) => {
                     /> : null
                 }
                 <View>
-                    <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                    <Text style={styles.dateFontSize}>
                         {formatDateWithTime(dateEnd)}
                     </Text>
                 </View>
@@ -278,19 +277,19 @@ const RequestNow = ({route, navigation}: any) => {
                     margin: 10,
                 }}
             />
-            <View style={{marginBottom: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={{fontWeight: 'bold'}}>
+            <View style={styles.normalTextContainer}>
+                <Text style={styles.normalText}>
                     Total Hours:
                 </Text>
-                <Text style={{fontWeight: 'bold', paddingRight: 10}}>
+                <Text style={styles.normalText}>
                     {totalHours}
                 </Text>
             </View>
-            <View style={{marginBottom: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={{fontWeight: 'bold'}}>
+            <View style={styles.normalTextContainer}>
+                <Text style={styles.normalText}>
                     Estimated Price:
                 </Text>
-                <Text style={{fontWeight: 'bold', paddingRight: 10}}>
+                <Text style={styles.normalText}>
                     {estimatedPrice}
                 </Text>
             </View>
@@ -309,7 +308,7 @@ const RequestNow = ({route, navigation}: any) => {
                             {receipt.name}
                         </Text> :
                         <Text style={{
-                            fontWeight: 'bold', color: 'red', fontSize: 20,
+                            fontWeight: 'bold', color: 'red', fontSize: RFPercentage(3),
                             paddingLeft: 20, paddingRight: 20
                         }}>
                             No Receipt Attached
@@ -318,12 +317,14 @@ const RequestNow = ({route, navigation}: any) => {
 
             </View>
             <View style={{marginBottom: 10, display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
-                <Button style={{width: '50%'}} onPress={_uploadReceipt}>
+                <Button containerStyle={styles.footerButtonSize} titleStyle={styles.footerButtonFontSize} onPress={_uploadReceipt}>
                     {
                         receipt ? 'Change Receipt' : 'Attached Receipt'
                     }
                 </Button>
-                <Button style={{width: '50%'}} onPress={_handleRequestBike} color={success}>
+                <Button containerStyle={styles.footerButtonSize}
+                titleStyle={styles.footerButtonFontSize}
+                onPress={_handleRequestBike} color={success}>
                     Rent Now
                 </Button>
             </View>
@@ -334,7 +335,32 @@ const RequestNow = ({route, navigation}: any) => {
 const styles = StyleSheet.create({
     buttonTitle: {
         color: "white",
-        fontSize: 12,
+        fontSize: RFPercentage(2),
+    }, 
+    buttonSize: {
+        width: RFPercentage(15)
+    },
+    dateFontSize: {
+        fontSize: RFPercentage(2.3),
+        fontWeight: 'bold'
+    },
+    footerButtonSize: {
+        width: RFPercentage(25)
+    },
+    footerButtonFontSize: {
+        fontSize: RFPercentage(2)
+    },
+    normalText: {
+        fontSize: RFPercentage(2.4),
+        fontWeight: 'bold'
+    },
+    normalTextContainer: {
+         marginBottom: 10,
+         display: 'flex', 
+         paddingLeft: 5, 
+         paddingRight: 5, 
+         flexDirection: 'row', 
+         justifyContent: 'space-between'
     }
 });
 

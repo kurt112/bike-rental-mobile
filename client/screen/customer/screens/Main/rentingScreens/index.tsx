@@ -4,6 +4,7 @@ import CustomerBill from "../../../CustomerBill";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomerProfile from "../../Profile";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const Tab = createBottomTabNavigator();
 const RentingScreens = ({
@@ -32,7 +33,7 @@ const RentingScreens = ({
 
 
                     // You can return any component that you like here!
-                    return <Ionicons name={`${iconName}`} size={30} color={'white'} />;
+                    return <Ionicons name={`${iconName}`} size={RFPercentage(3.5)} style={{fontSize: RFPercentage(4)}} color={'white'} />;
                 },
                 tabBarActiveTintColor: 'white',
                 tabBarInactiveTintColor: 'white',

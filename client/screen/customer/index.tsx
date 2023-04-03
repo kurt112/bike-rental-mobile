@@ -2,6 +2,7 @@ import {Fragment, useEffect, useState} from "react";
 import RentingScreens from "./screens/Main/rentingScreens";
 import NotRentingScreens from "./screens/Main/notRentingScreens";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { checkIfUserIsRenting } from "../../../.api/user-api";
 
 const CustomerMainScreen = ({
                                 navigation
@@ -10,15 +11,11 @@ const CustomerMainScreen = ({
     const [isRenting, setIsRenting] = useState<boolean>(false);
 
     useEffect(() => {
-        renting().then((renting: any) => {
-            setIsRenting(JSON.parse(renting));
+        checkIfUserIsRenting().then((result: any) => {
+            setIsRenting(result);
         })
-    }, [])
-
-    const renting = async () => {
-        return await AsyncStorage.getItem('isRenting');
-    }
-
+    })
+    
     return (
         <Fragment>
             {

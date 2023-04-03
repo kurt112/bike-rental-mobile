@@ -12,7 +12,6 @@ export const handleSubmit = async (e:SyntheticEvent, store:Store) => {
         //     location.reload();
         // })
     }).catch(error => {
-        console.log(error)
     });
 }
 

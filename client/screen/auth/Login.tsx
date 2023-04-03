@@ -9,6 +9,8 @@ import {UserLogin} from "../../../.types/credential";
 import {axiosSubmit} from "../../../.config/api";
 import { path } from "../../../utils/api/endpoint";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { success } from "../../../style";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 
 const Login = ({
@@ -29,34 +31,34 @@ const Login = ({
     }
 
     const _handleLogin = async () => {
-        console.log('pressing');
-        
-        await axiosSubmit.post(`${path.auth}/login`, cred).then(result => {
-            console.log('wew');
-            
+        await axiosSubmit.post(`${path.auth}/login`, cred).then(result => {            
             const {data} = result;
             const {token, user} = data;
-            AsyncStorage.setItem(
+                
+             AsyncStorage.setItem(
                 'user',
                 JSON.stringify(user)
             );
-            AsyncStorage.setItem(
+             AsyncStorage.setItem(
                 'token',
                 token
             );
-            AsyncStorage.setItem(
+             AsyncStorage.setItem(
                 'userID',
                 user.id.toString()
             );
-            AsyncStorage.setItem(
+             AsyncStorage.setItem(
                 'isRenting',
                 user.isRenting.toString()
             );
+             AsyncStorage.setItem(
+                'userRole',
+                user.userRole
+            );    
 
             if(user.userRole === 'customer'){
                 navigation.navigate('Customer Screen', {name: 'Customer Screen'})
             }else if(user.userRole === 'employee'){
-                console.log('employee')
             }else if(user.userRole === 'admin'){
                 navigation.navigate('Admin Screen', {name: 'Admin Screen'})
             }
@@ -68,20 +70,15 @@ const Login = ({
                 password: ''
             })
         }).catch(error => {
-            console.log('i ahve error');
-            
-            console.log(error);
             const {data} = error.response;
 
             setError(data.message);
 
             alert(data.message);
         }).finally(() => {
-            console.log('hotdo');
+            
             
         })
-
-
     }
 
 
@@ -107,15 +104,24 @@ const Login = ({
         <StatusBar style="auto"/>
         <Button
             title={'Login'}
+            titleStyle={{fontSize: RFPercentage(2)}}
             containerStyle={{
-                width: 200,
+                width: RFPercentage(50),
                 marginHorizontal: 50,
                 marginVertical: 10,
             }}
             onPress={_handleLogin}
-            // onPress={() =>
-            //     navigation.navigate('Your Screen', {name: 'Customer Screen'})
-            // }
+        />
+        <Button
+            title={'Register'}
+            containerStyle={{
+                width: RFPercentage(50),
+                marginHorizontal: 50,
+                marginVertical: 10
+            }}
+            titleStyle={{fontSize: RFPercentage(2)}}
+            style={{backgroundColor: success}}
+            onPress={() => navigation.navigate('Register', {name: 'Register'})}
         />
     </View>
 }

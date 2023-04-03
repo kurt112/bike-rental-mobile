@@ -11,7 +11,6 @@ const Map = ({
                      store,
                      location
                  }: props) => {
-    console.log(location);
     return (
         <MapView style={styles.map}
                  initialRegion={{
