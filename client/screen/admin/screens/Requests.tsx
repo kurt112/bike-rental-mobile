@@ -21,14 +21,14 @@ const Requests = ({
     const [isLoadMoreVisible, setIsLoadMoreVisible] = useState(true)
 
     useEffect(() => {
-        getBikes('', page, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
+        getBikes('', 1, 10, getBikeStatus.FOR_REQUEST).then(bikes => {
             setBikes(bikes)
             setPage(page + 1)
         })
     }, [])
 
     const _handleLastPage = async () => {
-        await getBikes('', page, 10, getBikeStatus.FOR_REQUEST).then(newBikes => {
+        await getBikes('', 1, 10, getBikeStatus.FOR_REQUEST).then(newBikes => {
             if (newBikes.length === 0) {
                 setIsLoadMoreVisible(false);
                 return;
@@ -98,15 +98,15 @@ const Requests = ({
                                                             }}>
 
                                     <View style={{display: 'flex',justifyContent: 'space-between',flexDirection: 'row'}}>
-                                    <Text style={{fontWeight: 'bold', fontSize: RFPercentage(2.2)}}>Rent Start: </Text>
-                                    <Text style={{fontWeight: 'bold', fontSize: RFPercentage(2.2)}}>{formatDateWithTime(bike.startBarrow)} </Text>
+                                    <Text style={{fontWeight: 'bold', fontSize: RFPercentage(1.7)}}>Rent Start: </Text>
+                                    <Text style={{fontWeight: 'bold', fontSize: RFPercentage(1.7)}}>{formatDateWithTime(bike.startBarrow)} </Text>
                                     </View>
                                     <View style={{display: 'flex',
                                       justifyContent: 'space-between',
                                       flexDirection: 'row'
                                       }}>
-                                      <Text style={{fontWeight: 'bold', fontSize: RFPercentage(2.2)}}>Rent End: </Text>
-                                      <Text style={{fontWeight: 'bold', fontSize: RFPercentage(2.2)}}>{formatDateWithTime(bike.endBarrow)} </Text>
+                                      <Text style={{fontWeight: 'bold', fontSize: RFPercentage(1.7)}}>Rent End: </Text>
+                                      <Text style={{fontWeight: 'bold', fontSize: RFPercentage(1.7)}}>{formatDateWithTime(bike.endBarrow)} </Text>
                                     </View>
                                  </View>
                                 <View style={{
@@ -122,16 +122,16 @@ const Requests = ({
                                         {
                                             bike.customerReceipt === null || bike.customerReceipt.picture === ''?  <Text style={{color: 'red'}}>No Receipt </Text> :
                                                 <Ionicons name="receipt-outline"
-                                                          size={RFPercentage(2.5)}
+                                                          size={RFPercentage(1.7)}
                                                           onPress={() => Linking.openURL(`https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike.customerReceipt.picture}`)}
                                                           color={info}
                                                 />
                                         }
 
                                         {
-                                            validIdPhoto === null || validIdPhoto === '' ? <Text style={{color: 'red'}}>No Valid ID</Text> :
+                                            validIdPhoto === null || validIdPhoto === '' ? <Text style={{color: 'red'}}>| No Valid ID</Text> :
                                                 <Ionicons name="person-circle-outline"
-                                                          size={RFPercentage(4.5)}
+                                                          size={RFPercentage(3.5)}
                                                           onPress={() => Linking.openURL(`https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${validIdPhoto}`)}
                                                           color={primary}
                                                 />
@@ -145,12 +145,12 @@ const Requests = ({
                                         width: '50%'
                                     }}>
                                         <Ionicons name="checkmark-circle-outline"
-                                                  size={RFPercentage(4.5)}
+                                                  size={RFPercentage(3.5)}
                                                   onPress={() => _handleApprove(user.id, bike.id)}
                                                   color={success}
                                         />
                                         <Ionicons name="trash-bin-outline"
-                                                  size={RFPercentage(4.5)}
+                                                  size={RFPercentage(3.5)}
                                                   onPress={() => _handleReject(user.id, bike.id)}
                                                   color={danger}
                                         />
