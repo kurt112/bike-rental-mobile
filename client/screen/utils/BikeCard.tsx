@@ -19,19 +19,19 @@ const BikeCard = ({
             {
                 fontWeight: 'bold',
                 textTransform: 'capitalize',
-                fontSize: RFPercentage(2.5),
+                fontSize: RFPercentage(2),
                 color: 'black'
             }}>
             {`${bike.brand} (${bike.price}₱/hr)`}
         </Card.Title>
         <Card.Divider/>
         <Card.Image
-            style={{padding: 0, width: RFPercentage(50), height: RFPercentage(30)}}
+            style={{padding: 0, width: RFPercentage(40), height: RFPercentage(20)}}
             source={bike.bikePictures.length === 0 ? defaultBikeLogo : {
                 uri: `https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike.bikePictures[0].pictureName}`
             }}
         />
-        <Text style={{marginBottom: 5, marginTop: 5, textAlign: 'center', fontSize: RFPercentage(2.5)}}>
+        <Text style={{marginBottom: 5, marginTop: 5, textAlign: 'center', fontSize: RFPercentage(1.5)}}>
             {
                 bike.description
             }

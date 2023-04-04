@@ -165,7 +165,7 @@ const Requests = ({
                     <Button containerStyle={{
                         width: '100%'
                     }}
-                    titleStyle={{fontSize: RFPercentage(2.5)}}
+                    titleStyle={{fontSize: RFPercentage(2)}}
                             title="Load More"
                             type="clear"
                             onPress={_handleLastPage}

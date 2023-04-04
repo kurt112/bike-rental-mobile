@@ -54,7 +54,7 @@ const BikeAvailable = ({
                                         name: BikeNavigation.Request.name,
                                         bikeId: bike.id
                                     })}
-                                    titleStyle={{fontSize: RFPercentage(2)}}
+                                    titleStyle={{fontSize: RFPercentage(1.5)}}
                                     title="Rent Now"
                                 />
                             </BikeCard>
@@ -66,7 +66,7 @@ const BikeAvailable = ({
                         containerStyle={{
                             width: '100%'
                         }}
-                        titleStyle={{fontSize: RFPercentage(2.5)}}
+                        titleStyle={{fontSize: RFPercentage(2)}}
                         title="Load More"
                         type="clear"
                         onPress={_handleLastPage}

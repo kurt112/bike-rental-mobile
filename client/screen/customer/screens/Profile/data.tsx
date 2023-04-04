@@ -83,7 +83,7 @@ const UserData = (
 
 
                 <Button titleStyle={{
-                    fontSize: RFPercentage(2)
+                    fontSize: RFPercentage(1.5)
                 }} 
                 containerStyle={
                     {
@@ -94,7 +94,7 @@ const UserData = (
                 color={'error'} 
                 />
                 <Button titleStyle={{
-                    fontSize: RFPercentage(2)
+                    fontSize: RFPercentage(1.5)
                 }} 
                 containerStyle={
                     {
@@ -123,10 +123,10 @@ const styles = StyleSheet.create({
     },
     dataTitle: {
         fontWeight: 'bold',
-        fontSize: RFPercentage(2.5)
+        fontSize: RFPercentage(2)
     },
     data: {
-        fontSize: RFPercentage(2.5)
+        fontSize: RFPercentage(2)
     }
 });
 

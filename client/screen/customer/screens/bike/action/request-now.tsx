@@ -153,14 +153,14 @@ const RequestNow = ({route, navigation}: any) => {
                     {
                         fontWeight: 'bold',
                         textTransform: 'capitalize',
-                        fontSize: RFPercentage(2.5),
+                        fontSize: RFPercentage(2),
                         color: 'black'
                     }}>
                     {`${bike.brand} (${bike.price}₱/hr)`}
                 </Card.Title>
                 <Card.Title style={
                     {
-                        fontSize: RFPercentage(2),
+                        fontSize: RFPercentage(1.5),
                         color: 'white',
                         backgroundColor: '#333'
                     }}>
@@ -172,7 +172,7 @@ const RequestNow = ({route, navigation}: any) => {
                         uri: `https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike?.bikePictures[0].pictureName}`
                     }}
                 />
-                <Text style={{marginBottom: 5, marginTop: 5, textAlign: 'center', fontSize: RFPercentage(3)}}>
+                <Text style={{marginBottom: 5, marginTop: 5, textAlign: 'center', fontSize: RFPercentage(2)}}>
                     {
                         bike?.description
                     }
@@ -308,7 +308,7 @@ const RequestNow = ({route, navigation}: any) => {
                             {receipt.name}
                         </Text> :
                         <Text style={{
-                            fontWeight: 'bold', color: 'red', fontSize: RFPercentage(3),
+                            fontWeight: 'bold', color: 'red', fontSize: RFPercentage(2),
                             paddingLeft: 20, paddingRight: 20
                         }}>
                             No Receipt Attached
@@ -335,23 +335,23 @@ const RequestNow = ({route, navigation}: any) => {
 const styles = StyleSheet.create({
     buttonTitle: {
         color: "white",
-        fontSize: RFPercentage(2),
+        fontSize: RFPercentage(1.5),
     }, 
     buttonSize: {
-        width: RFPercentage(15)
+        width: RFPercentage(10)
     },
     dateFontSize: {
-        fontSize: RFPercentage(2.3),
+        fontSize: RFPercentage(2),
         fontWeight: 'bold'
     },
     footerButtonSize: {
-        width: RFPercentage(25)
+        width: RFPercentage(20)
     },
     footerButtonFontSize: {
-        fontSize: RFPercentage(2)
+        fontSize: RFPercentage(1.5)
     },
     normalText: {
-        fontSize: RFPercentage(2.4),
+        fontSize: RFPercentage(2),
         fontWeight: 'bold'
     },
     normalTextContainer: {

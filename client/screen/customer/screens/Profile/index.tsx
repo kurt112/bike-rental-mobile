@@ -46,12 +46,12 @@ const CustomerProfile = ({
     return (
         <View style={styles.container}>
             <Avatar
-                size={RFPercentage(10)}
+                size={RFPercentage(7)}
                 rounded
                 title={`${user.firstName || user.firstName.length > 0 ? user.firstName[0].toUpperCase():'E'}${user.lastName ||user.lastName.length > 0 ? user.lastName[0].toUpperCase():'B'}`}
                 containerStyle={{backgroundColor: 'indigo'}}
             >
-                <Avatar.Accessory size={RFPercentage(3.5)} onPress={() => setIsEdit(true)}/>
+                <Avatar.Accessory size={RFPercentage(3)} onPress={() => setIsEdit(true)}/>
             </Avatar>
 
             <View style={styles.nameContainer}>
@@ -73,18 +73,18 @@ const CustomerProfile = ({
             >
                 <Tab.Item
                     title="Personal Info"
-                    titleStyle={{fontSize: RFPercentage(1.5)}}
-                    icon={{name: 'help-circle-outline', type: 'ionicon', color: 'white', size: RFPercentage(4)}}
+                    titleStyle={{fontSize: RFPercentage(1)}}
+                    icon={{name: 'help-circle-outline', type: 'ionicon', color: 'white', size: RFPercentage(3)}}
                 />
                 <Tab.Item
                     title="Actions"
-                    titleStyle={{fontSize: RFPercentage(1.5)}}
-                    icon={{name: 'hammer-outline', type: 'ionicon', color: 'white',size: RFPercentage(4)}}
+                    titleStyle={{fontSize: RFPercentage(1)}}
+                    icon={{name: 'hammer-outline', type: 'ionicon', color: 'white',size: RFPercentage(3)}}
                 />
                 <Tab.Item
                     title="Notifications"
-                    titleStyle={{fontSize: RFPercentage(1.5)}}
-                    icon={{name: 'notifications-circle-outline', type: 'ionicon', color: 'white',size: RFPercentage(4)}}
+                    titleStyle={{fontSize: RFPercentage(1)}}
+                    icon={{name: 'notifications-circle-outline', type: 'ionicon', color: 'white',size: RFPercentage(3)}}
                 />
                 {/*<Tab.Item*/}
                 {/*    title="Profile"*/}
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
         padding: RFPercentage(1)
     },
     displayName: {
-        fontSize: RFPercentage(2),
+        fontSize: RFPercentage(.2),
         fontFamily: 'sans-serif-medium'
     }
 });

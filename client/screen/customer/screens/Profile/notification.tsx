@@ -21,12 +21,12 @@ const NotificationScreen = () => {
                 notifications.map((notification: any) => {
                     return <View style={styles.container} key={notification.id}>
                         <View style={styles.notificationIcon}>
-                            <Ionicons name={`md-person`} size={RFPercentage(4)} color={'#039BE5'} />
+                            <Ionicons name={`md-person`} size={RFPercentage(3)} color={'#039BE5'} />
                         </View>
                         <View>
                             <View style={{display: 'flex', flexDirection:'row'}}>
-                                <Text style={{fontWeight: 'bold', fontSize: RFPercentage(2), textTransform: 'capitalize', marginRight: 5}}>{`${notification.from.firstName} ${notification.from.lastName}`}</Text>
-                                <Text style={{fontSize: RFPercentage(2)}}>{notification.message}</Text>
+                                <Text style={{fontWeight: 'bold', fontSize: RFPercentage(1.5), textTransform: 'capitalize', marginRight: 5}}>{`${notification.from.firstName} ${notification.from.lastName}`}</Text>
+                                <Text style={{fontSize: RFPercentage(1.5)}}>{notification.message}</Text>
                             </View>
                             <Text style={{fontSize: RFPercentage(1.5)}}>{getFromNowDate(notification.createdAt)}</Text>
                         </View>
