@@ -106,7 +106,7 @@ const Login = ({
             title={'Login'}
             titleStyle={{fontSize: RFPercentage(2)}}
             containerStyle={{
-                width: RFPercentage(50),
+                width: RFPercentage(40),
                 marginHorizontal: 50,
                 marginVertical: 10,
             }}
@@ -115,7 +115,7 @@ const Login = ({
         <Button
             title={'Register'}
             containerStyle={{
-                width: RFPercentage(50),
+                width: RFPercentage(40),
                 marginHorizontal: 50,
                 marginVertical: 10
             }}

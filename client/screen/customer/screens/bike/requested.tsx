@@ -48,7 +48,7 @@ const BikeRequested = ({
                                         marginRight: 0,
                                         marginBottom: 0,
                                     }}
-                                    titleStyle={{fontSize: RFPercentage(2)}}
+                                    titleStyle={{fontSize: RFPercentage(1.5)}}
                                     title="Cancel"
                                     color={'error'}
                                     onPress={() => _handleCancelBike(bike.id)}
