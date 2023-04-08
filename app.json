@@ -14,13 +14,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.jpg",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/ade16237-fd98-42a8-a53a-d8f299b9b80d"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -30,10 +26,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.jpg",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.orioque35.myapp"
+      "package": "com.orioque35.myapp",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,6 +43,9 @@
       "eas": {
         "projectId": "ade16237-fd98-42a8-a53a-d8f299b9b80d"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }
