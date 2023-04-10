@@ -30,9 +30,9 @@ const CustomerMap = () => {
     }, [])
     useEffect(() => {
         const interval = setInterval(() => {
-            // getBikeByCustomerWithLocation('').then(bikeResult => {
-            //
-            // })
+            getBikeByCustomerWithLocation('').then(bikeResult => {
+            
+            })
             setCurrentLocation().then();
         }, 3000);
         return () => clearInterval(interval);

@@ -10,6 +10,7 @@ import { StyleSheet } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { formatDate } from "../../../utils/date";
 import { handleSubmitCustomer } from "../../../.api/customer-api";
+import { log } from "react-native-reanimated";
 
 const Register = () => {
     const [user, setUser] = useState<UserCreate>({
@@ -74,9 +75,15 @@ const Register = () => {
             alert('registered')
           
         }).catch(error => {
-            // validate in backend
-            // const backendValidation: UserValidationMessage = validateRegisterCustomerApi(tempValidation, error);
-            // setValidation(backendValidation);
+            const {email, cellphone} = error;
+
+            if(email){
+                alert(email);
+            }
+
+            if(cellphone) {
+                alert(cellphone);
+            }
         });
         
 
@@ -140,8 +147,8 @@ const Register = () => {
                                     value={user.birthdate}
                                 /> : null
                         }
-                        <View>
-                            <Text>{user.birthdate === '' ? formatDate(new Date()) : formatDate(user.birthdate)}</Text>
+                        <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent:'center'}}>
+                            <Text style={{fontSize: RFPercentage(2.2), fontWeight: 'bold'}}>{user.birthdate === '' ? formatDate(new Date()) : formatDate(user.birthdate)}</Text>
                         </View>
                     </View>
                 </View>
@@ -187,7 +194,7 @@ const thisStyle = StyleSheet.create({
     },
     buttonTitle: {
         color: "white",
-        fontSize: RFPercentage(2),
+        fontSize: RFPercentage(1.5),
     },
     buttonSize: {
         width: RFPercentage(15)

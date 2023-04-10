@@ -71,7 +71,7 @@ const Login = ({
             })
         }).catch(error => {
             const {data} = error.response;
-
+            console.log(error);
             setError(data.message);
 
             alert(data.message);
