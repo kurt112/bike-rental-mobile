@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Dimensions, StyleSheet, Text, View} from "react-native";
+import {Dimensions, StyleSheet, Text, View,Image} from "react-native";
 import {Store} from "../../../../.types/store";
 import {getStoreData} from "../../../../.api/store-api";
 import {getBikes} from "../../../../.api/bike-api";
@@ -7,6 +7,8 @@ import {BikeObject} from "../../../../.types/bike";
 import {getBikeStatus} from "../../../../utils/bike";
 import MapView, {Circle, Marker} from "react-native-maps";
 import {PROVIDER_GOOGLE} from 'react-native-maps'
+import bikeMarker from '../../../../assets/_images/bike-marker.png';
+
 const AdminMap = () => {
 
     const [bikes, setBikes] = useState<[BikeObject] | null>(null)
@@ -74,8 +76,9 @@ const AdminMap = () => {
                                                longitude: bike.longitude ? +bike.longitude : 1
                                            }}
                                            description={'ashdfkjlhas'}
-
-                            />
+                                    >
+                                         <Image source={bikeMarker} style={{height: 45, width:45 }} />
+                                    </Marker>
                         })
                     }
                     <Circle center={{
