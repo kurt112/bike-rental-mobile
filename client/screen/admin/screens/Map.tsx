@@ -6,7 +6,7 @@ import {getBikes} from "../../../../.api/bike-api";
 import {BikeObject} from "../../../../.types/bike";
 import {getBikeStatus} from "../../../../utils/bike";
 import MapView, {Circle, Marker} from "react-native-maps";
-
+import {PROVIDER_GOOGLE} from 'react-native-maps'
 const AdminMap = () => {
 
     const [bikes, setBikes] = useState<[BikeObject] | null>(null)
@@ -42,7 +42,9 @@ const AdminMap = () => {
             store.id === '' ?
                 <Text>No Data Found</Text> :
 
-                <MapView style={styles.map}
+                <MapView 
+                provider={PROVIDER_GOOGLE}
+                style={styles.map}
                          initialRegion={{
                              latitude: +store.latitude,
                              longitude: +store.longitude,
@@ -50,6 +52,7 @@ const AdminMap = () => {
                              longitudeDelta: 0.0421,
                          }}
                          showsCompass={true}
+                         
                 >
                     <Marker
                         coordinate={{latitude: +store.latitude, longitude: +store.longitude}}

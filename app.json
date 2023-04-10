@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "bike-rental",
+    
     "plugins": [
       [
         "expo-location",
@@ -35,7 +36,12 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.FOREGROUND_SERVICE"
-      ]
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDemKVk7XsaxU-Vt2jmE1TcRv1rOlL_SNA"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
