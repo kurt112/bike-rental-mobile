@@ -26,7 +26,7 @@ const BikeCard = ({
         </Card.Title>
         <Card.Divider/>
         <Card.Image
-            style={{padding: 0, width: RFPercentage(40), height: RFPercentage(20)}}
+            style={{padding: 0, width: '100%', height: RFPercentage(20)}}
             source={bike.bikePictures.length === 0 ? defaultBikeLogo : {
                 uri: `https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike.bikePictures[0].pictureName}`
             }}

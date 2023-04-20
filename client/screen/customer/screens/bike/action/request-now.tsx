@@ -238,7 +238,7 @@ const RequestNow = ({route, navigation}: any) => {
                 alignItems: 'center'
             }}>
                 <View style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
-                    <View style={{marginRight: 10, width: 75}}>
+                    <View style={{marginRight: 10}}>
                         <Button titleStyle={styles.buttonTitle} containerStyle={styles.buttonSize} onPress={() => setDateEndOpen(true)}>
                             Date End
                         </Button>

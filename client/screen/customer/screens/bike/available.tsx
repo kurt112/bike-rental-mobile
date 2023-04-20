@@ -1,21 +1,22 @@
-import React, {Fragment, useState} from "react";
-import {Animated, StyleSheet, View} from "react-native";
-import {Button} from "@rneui/themed";
+import React, { Fragment, useState } from "react";
+import { Animated, RefreshControl, StyleSheet, View } from "react-native";
+import { Button } from "@rneui/themed";
 import ScrollView = Animated.ScrollView;
-import {getBikeAvailable} from "../../../../../.api/bike-api";
+import { getBikeAvailable } from "../../../../../.api/bike-api";
 import BikeNavigation from "../../../../../navigation/Bike";
 import BikeCard from "../../../utils/BikeCard";
 import NoBikeAvailable from "../../../utils/NoBikeAvailable";
 import { RFPercentage } from "react-native-responsive-fontsize";
 
 const BikeAvailable = ({
-                           navigation,
-                           bikes,
-                           setBikes,
-                           setBikeRequested
-                       }: any) => {
+    navigation,
+    bikes,
+    setBikes,
+    setBikeRequested
+}: any) => {
     const [page, setPage] = useState(1);
     const [isLoadMoreVisible, setIsLoadMoreVisible] = useState(true)
+    const [refreshing, setRefreshing] = useState(false);
 
     const _handleLastPage = async () => {
         const newPage = page + 1;
@@ -33,12 +34,24 @@ const BikeAvailable = ({
 
     }
 
+    const getBikesAvailable = () => {
+        getBikeAvailable('', 1, 10).then(newBikes => {
+            const tempBikes = [...bikes]
+            tempBikes.concat(newBikes);
+            setBikes(tempBikes)
+        }).catch(error => {})
+    }
+
     return (
         <Fragment>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl refreshing={refreshing}
+                        onRefresh={getBikesAvailable} />
+                }>
                 <View style={styles.container}>
                     {
-                        bikes === undefined || bikes.length === 0 ? <NoBikeAvailable/> : bikes.map((bike: any) => {
+                        bikes === undefined || bikes.length === 0 ? <NoBikeAvailable /> : bikes.map((bike: any) => {
                             return <BikeCard bike={bike} key={bike.id}>
                                 <Button
                                     buttonStyle={{
@@ -54,7 +67,7 @@ const BikeAvailable = ({
                                         name: BikeNavigation.Request.name,
                                         bikeId: bike.id
                                     })}
-                                    titleStyle={{fontSize: RFPercentage(1.5)}}
+                                    titleStyle={{ fontSize: RFPercentage(1.5) }}
                                     title="Rent Now"
                                 />
                             </BikeCard>
@@ -66,7 +79,7 @@ const BikeAvailable = ({
                         containerStyle={{
                             width: '100%'
                         }}
-                        titleStyle={{fontSize: RFPercentage(2)}}
+                        titleStyle={{ fontSize: RFPercentage(2) }}
                         title="Load More"
                         type="clear"
                         onPress={_handleLastPage}
