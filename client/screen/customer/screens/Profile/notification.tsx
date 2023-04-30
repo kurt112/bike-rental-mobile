@@ -28,7 +28,7 @@ const NotificationScreen = () => {
                                 <Text style={{fontWeight: 'bold', fontSize: RFPercentage(1.5), textTransform: 'capitalize', marginRight: 5}}>{`${notification.from.firstName} ${notification.from.lastName}`}</Text>
                                 <Text style={{fontSize: RFPercentage(1.5)}}>{notification.message}</Text>
                             </View>
-                            <Text style={{fontSize: RFPercentage(1.5)}}>{formatDate(notification.createdAt)}</Text>
+                            <Text style={{fontSize: RFPercentage(1.5)}}>{getFromNowDate(notification.createdAt)}</Text>
                         </View>
                     </View>
                 })
