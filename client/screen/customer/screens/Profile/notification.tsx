@@ -3,7 +3,7 @@ import {ScrollView, StyleSheet, View} from "react-native";
 import {Text} from "@rneui/themed";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {getNotifications} from "../../../../../.api/notification-api";
-import {getFromNowDate} from "../../../../../utils/date";
+import {formatDate, getFromNowDate} from "../../../../../utils/date";
 import { RFPercentage } from "react-native-responsive-fontsize";
 
 const NotificationScreen = () => {
@@ -28,7 +28,7 @@ const NotificationScreen = () => {
                                 <Text style={{fontWeight: 'bold', fontSize: RFPercentage(1.5), textTransform: 'capitalize', marginRight: 5}}>{`${notification.from.firstName} ${notification.from.lastName}`}</Text>
                                 <Text style={{fontSize: RFPercentage(1.5)}}>{notification.message}</Text>
                             </View>
-                            <Text style={{fontSize: RFPercentage(1.5)}}>{getFromNowDate(notification.createdAt)}</Text>
+                            <Text style={{fontSize: RFPercentage(1.5)}}>{formatDate(notification.createdAt)}</Text>
                         </View>
                     </View>
                 })
