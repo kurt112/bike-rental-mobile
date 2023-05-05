@@ -11,6 +11,7 @@ import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { formatDate } from "../../../utils/date";
 import { handleSubmitCustomer } from "../../../.api/customer-api";
 import { log } from "react-native-reanimated";
+import { SelectList } from "react-native-dropdown-select-list";
 
 const Register = () => {
     const [user, setUser] = useState<UserCreate>({
@@ -29,7 +30,7 @@ const Register = () => {
         isEnabled: true,
         isRenting: false
     });
-
+    const [selected, setSelected] = useState<string>("Male");
     const [reTypePassword, setRetypePassword] = useState<string>('');
     const [birthdateOpen, setBirthdayOpen] = useState<boolean>(false);
 
@@ -50,16 +51,25 @@ const Register = () => {
         isActive: true
     });
 
+    const data = [
+        { key: '1', value: 'Male' },
+        { key: '2', value: 'Female' },
+    ]
+
     const _handleRegister = async () => {
 
+        if(customer.user?.password !== reTypePassword){
+            return alert('Passwords do not match');
+        }
+
         await handleSubmitCustomer(customer).then(result => {
-            const {data} = result;
+            const { data } = result;
             setUser({
                 email: "",
                 firstName: "",
                 lastName: "",
                 middleName: "",
-                gender: "Male",
+                gender: selected,
                 password: "",
                 birthdate: new Date(),
                 cellphone: "",
@@ -73,19 +83,19 @@ const Register = () => {
             setRetypePassword('')
 
             alert('registered')
-          
-        }).catch(error => {
-            const {email, cellphone} = error;
 
-            if(email){
+        }).catch(error => {
+            const { email, cellphone } = error;
+
+            if (email) {
                 alert(email);
             }
 
-            if(cellphone) {
+            if (cellphone) {
                 alert(cellphone);
             }
         });
-        
+
 
     }
 
@@ -133,7 +143,7 @@ const Register = () => {
                     />
                 </View>
                 <View style={thisStyle.inputs}>
-                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 10, paddingRight: 10}}>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 10, paddingRight: 10 }}>
                         <View>
                             <Button titleStyle={thisStyle.buttonTitle} containerStyle={thisStyle.buttonSize} onPress={() => setBirthdayOpen(true)}>
                                 Birthdate
@@ -147,8 +157,8 @@ const Register = () => {
                                     value={user.birthdate}
                                 /> : null
                         }
-                        <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent:'center'}}>
-                            <Text style={{fontSize: RFPercentage(2.2), fontWeight: 'bold'}}>{user.birthdate === '' ? formatDate(new Date()) : formatDate(user.birthdate)}</Text>
+                        <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+                            <Text style={{ fontSize: RFPercentage(2.2), fontWeight: 'bold' }}>{user.birthdate === '' ? formatDate(new Date()) : formatDate(user.birthdate)}</Text>
                         </View>
                     </View>
                 </View>
@@ -168,6 +178,16 @@ const Register = () => {
                         placeholder='Re-type Password'
                         secureTextEntry={true}
                         onChangeText={(e) => setRetypePassword(e)}
+                    />
+                </View>
+                <View style={thisStyle.inputs}>
+                    <SelectList
+                        searchPlaceholder='Select Gender'
+                        search={false}
+                        setSelected={(val:string) => setSelected(val)}
+                        data={data}
+                        save='value'
+                        defaultOption={{ key: '1', value: 'Male' }}
                     />
                 </View>
 
