@@ -215,7 +215,7 @@ export const validateCustomer = (validation: UserValidationMessage, customer: Cu
 }
 
 export const checkIfUserIsRenting = async () => {
-    const token = await AsyncStorage.getItem('token')
+    const token = await AsyncStorage.getItem('token');
 
     const {data} = await axiosSubmit.get(path.customer+'/'+token+'/isRenting').then(data => {
         if(!data.data) return 0;
@@ -227,7 +227,7 @@ export const checkIfUserIsRenting = async () => {
 }
 
 export const handleUploadReceiptCustomer = async (picture: any) => {
-    const token = localStorage.getItem('token');
+    const token = await AsyncStorage.getItem('token');
     const params = new URLSearchParams();
 
     params.append('token',""+token);

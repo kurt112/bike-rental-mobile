@@ -11,7 +11,8 @@ import {getBikeStatus} from "../../../../../../utils/bike";
 import * as DocumentPicker from 'expo-document-picker';
 import {success} from "../../../../../../style";
 import { RFPercentage } from "react-native-responsive-fontsize";
-
+import { handleUploadReceiptCustomer } from "../../../../../../.api/customer-api";
+import {uploadToS3} from "../../../../../../.api/aws/s3";
 const RequestNow = ({route, navigation}: any) => {
     const {bikeId, setBikes, setPage, setBikeRequested} = route.params;
     const [estimatedPrice, setEstimatedPrice] = useState<number>(0);
@@ -77,27 +78,23 @@ const RequestNow = ({route, navigation}: any) => {
                     })
                     setBikeRequested(tempBikeRequested)
 
-                }).finally(() => {
-                    navigation.goBack();
                 });
             })
         }).catch((ignored) => {
             alert('Please Cancel Your Request Bike')
-        })
-
-
-        if (success) {
-            alert('Bike rent request success');
-        }
+        });
+        
         // will uncomment if answer find
-        // if(success && receipt !== ''){
-        //     await uploadToS3(receipt,null).then(name => {
-        //         handleUploadReceiptCustomer(name).then(ignored => {
-        //
-        //         })
-        //     })
-        // }else if (success) {
-        // }
+        if(success && receipt !== ''){
+            await uploadToS3(receipt,null).then(name => {
+                alert('Successfully ' + name)
+                handleUploadReceiptCustomer(name).then(ignored => {
+                    alert('Bike rent request success');
+                    navigation.goBack();
+                })
+            });
+        }
+
     }
 
     const _handleChangeDateStart = (e: any, date: Date | undefined, index: number) => {
@@ -135,7 +132,6 @@ const RequestNow = ({route, navigation}: any) => {
 
     const _uploadReceipt = async () => {
         let result: any = await DocumentPicker.getDocumentAsync({});
-
 
         setReceipt(result);
     }

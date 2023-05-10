@@ -20,10 +20,13 @@ export const uploadToS3 = async (image: any, bike: any) => {
     const extension = image.name.split('.').pop();
     const type = image.mimeType
     const imageName = `${uuidv4()}.${extension}`;
+    const fetchImage = await fetch(image.uri);
+    const blobImage = await fetchImage.blob();
+    alert(blobImage)
     await s3.putObject({
         Key: imageName,
         Bucket: bucketName,
-        Body: image,
+        Body: blobImage,
         ACL: 'public-read',
         ContentType: type
     }).promise()
@@ -32,6 +35,7 @@ export const uploadToS3 = async (image: any, bike: any) => {
                 axiosSubmit.post(`bike/${bike.id}/photo/${imageName}`)
             }
         }).catch(error => {
+            
         });
 
 
