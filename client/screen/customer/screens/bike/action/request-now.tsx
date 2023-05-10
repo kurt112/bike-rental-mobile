@@ -1,20 +1,22 @@
-import React, {useEffect, useState} from "react";
-import {View, ScrollView, StyleSheet} from "react-native";
-import {BikeObject} from "../../../../../../.types/bike";
-import {getBikeAvailable, getBikeByCustomer, getBikeData, requestBikeByCustomer} from "../../../../../../.api/bike-api";
-import {Button, Card, Text} from "@rneui/themed";
-import {defaultBikeLogo} from "../../../../../../image";
+import React, { useEffect, useState } from "react";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { BikeObject } from "../../../../../../.types/bike";
+import { getBikeAvailable, getBikeByCustomer, getBikeData, requestBikeByCustomer } from "../../../../../../.api/bike-api";
+import { Button, Card, Text, CheckBox } from "@rneui/themed";
+import { defaultBikeLogo } from "../../../../../../image";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import {formatDateWithTime} from "../../../../../../utils/date";
+import { formatDateWithTime } from "../../../../../../utils/date";
 import moment from "moment";
-import {getBikeStatus} from "../../../../../../utils/bike";
+import { getBikeStatus } from "../../../../../../utils/bike";
 import * as DocumentPicker from 'expo-document-picker';
-import {success} from "../../../../../../style";
+import { success } from "../../../../../../style";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import { handleUploadReceiptCustomer } from "../../../../../../.api/customer-api";
-import {uploadToS3} from "../../../../../../.api/aws/s3";
-const RequestNow = ({route, navigation}: any) => {
-    const {bikeId, setBikes, setPage, setBikeRequested} = route.params;
+import { uploadToS3 } from "../../../../../../.api/aws/s3";
+import { Dialog } from '@rneui/themed';
+
+const RequestNow = ({ route, navigation }: any) => {
+    const { bikeId, setBikes, setPage, setBikeRequested } = route.params;
     const [estimatedPrice, setEstimatedPrice] = useState<number>(0);
     const [totalHours, setTotalHours] = useState(0);
     const [dateStartOpen, setDateStartOpen] = useState(false);
@@ -26,7 +28,8 @@ const RequestNow = ({route, navigation}: any) => {
     const [timeStart, setTimeStart] = useState<Date | undefined>(new Date());
     const [timeEnd, setTimeEnd] = useState<Date | undefined>(new Date());
     const [receipt, setReceipt] = useState<any>();
-
+    const [agree, setAgree] = useState<boolean>(false);
+    const [dialogTermAndCondition,setDialogTermAndCondition] = useState<boolean>(false);
     const [bike, setBike] = useState<BikeObject>({
         brand: '',
         size: 0,
@@ -83,10 +86,10 @@ const RequestNow = ({route, navigation}: any) => {
         }).catch((ignored) => {
             alert('Please Cancel Your Request Bike')
         });
-        
+
         // will uncomment if answer find
-        if(success && receipt !== ''){
-            await uploadToS3(receipt,null).then(name => {
+        if (success && receipt !== '') {
+            await uploadToS3(receipt, null).then(name => {
                 alert('Successfully ' + name)
                 handleUploadReceiptCustomer(name).then(ignored => {
                     alert('Bike rent request success');
@@ -129,14 +132,57 @@ const RequestNow = ({route, navigation}: any) => {
 
     }
 
-
     const _uploadReceipt = async () => {
         let result: any = await DocumentPicker.getDocumentAsync({});
 
         setReceipt(result);
     }
 
-    return <ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+    const _handleAgree = (result: boolean) => {
+        setAgree(result)
+        setDialogTermAndCondition(false);
+    }
+
+    return <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+        <Dialog
+            style={{overflow: "scroll"}}
+            isVisible={dialogTermAndCondition}
+            onBackdropPress={() =>setDialogTermAndCondition(false) }
+        >
+            <ScrollView >
+            <Dialog.Title title="Dialog Title" />
+            <Text>
+                {`Term‘s and conditions
+Wherever used herein, the term “equipment” shall include any equipment rented from Erik’s Bike Shop. Erik’s Bike Shop, and its employees shall not be responsible for personal injuries or property damage, loss or delay incurred by any person arising out of negligence of any direct or supplemental carrier or other person rendering any of the services orproducts being offered in these rentals; nor shall Erik’s Bike Shop be responsible for any injuries, death, damage,loss or delay in any means of transportation or by reasons of any event beyond the actual control of Erik’s Bike Shop.
+
+
+1. Renters follow any suggested route at their own risk and agree not to hold Erik’s Bike Shop responsible for injury or death resulting from accidents.
+2. We strongly recommend the use of approved helmets whenever mounted on a bicycle.
+3. The bicycles provided for use are in satisfactory operating condition and participants agree to use them at their own risk or call fault to the attention of a company representative.
+4. Individual bike specifications are subject to change based on availability of replacement components.
+5. Instruction in the use, assembly and maintenance of bicycles will not be provided and participants affirm that they are competent and familiar with the use of a multi-speed bicycle.
+
+
+
+MAINTENANCE, TUNING AND RESPONSIBILITY
+
+While all our bikes are professionally serviced before dispatch, bicycles may need tuning or maintenance during the rental period; such maintenance will be carried out at the renter's expense. Erik’s Bike Shop will cover the cost of damages due to equipment failures beyond the renters control, i.e., damage occurred during transport or worn parts.
+
+1. Any faults must be communicated to Erik’s Bike Shop within 24 hours of receipt of the equipment.
+2. To be eligible for a refund on such parts and service, you must provide Erik’s Bike Shop with a photo of the damaged or worn parts and an invoice for new parts or services.
+3. Erik’s Bike Shop is responsible for structural faults such as damaged frames, worn bottom brackets, suspension, and wheel hubs.
+4. Erik’s Bike Shop is not responsible for the following occurrences during bike rental: gear tune ups / punctures / broken spokes / broken chains / broken derailleurs / broken drop - outs / wheel rim damage / torn saddles / stripped threads on pedal crank / damage beyond the control of Erik’s Bike Shop and resultant of rider use or misuse.
+5. If you are undertaking an unassisted bicycle tour, we strongly recommend that you have some basic bicycle maintenance knowledge. A list of the closest bike shops can be provided on request.
+RESPONSIBILITY FOR DAMAGE OR LOSS
+
+Customer agrees he/she will return the bike and equipment in the same good condition as when received, ordinary wear and tear accepted, and to repair and replace lost or stolen, damaged or broken bicycles or parts or to reimburse Erik’s Bike Shop for said equipment. Therefore, regardless of the party at fault, customer understands and agrees to be responsible for the theft or damage to said equipment.`}
+            </Text>
+            <Dialog.Actions>
+                <Dialog.Button title="Not Agree" onPress={() => _handleAgree(false)} />
+                <Dialog.Button title="Agree" onPress={() => _handleAgree(true)} />
+            </Dialog.Actions>
+            </ScrollView>
+        </Dialog>
         <View style={{
             marginBottom: 20
         }}>
@@ -163,12 +209,12 @@ const RequestNow = ({route, navigation}: any) => {
                     {`QTY: ${bike.quantity}`}
                 </Card.Title>
                 <Card.Image
-                    style={{padding: 0}}
+                    style={{ padding: 0 }}
                     source={bike?.bikePictures.length === 0 ? defaultBikeLogo : {
                         uri: `https://bike-rental-file.s3.ap-southeast-1.amazonaws.com/${bike?.bikePictures[0].pictureName}`
                     }}
                 />
-                <Text style={{marginBottom: 5, marginTop: 5, textAlign: 'center', fontSize: RFPercentage(2)}}>
+                <Text style={{ marginBottom: 5, marginTop: 5, textAlign: 'center', fontSize: RFPercentage(2) }}>
                     {
                         bike?.description
                     }
@@ -192,8 +238,8 @@ const RequestNow = ({route, navigation}: any) => {
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
-                <View style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
-                    <View style={{marginRight: 10}}>
+                <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-between' }}>
+                    <View style={{ marginRight: 10 }}>
                         <Button titleStyle={styles.buttonTitle} containerStyle={styles.buttonSize} onPress={() => setDateStartOpen(true)}>
                             Date Start
                         </Button>
@@ -208,16 +254,16 @@ const RequestNow = ({route, navigation}: any) => {
                     !dateStartOpen ? null
                         :
                         <RNDateTimePicker mode={'date'}
-                                          onChange={(event, date) => _handleChangeDateStart(event, date, 1)}
-                                          minimumDate={new Date()} value={dateStart ? dateStart : new Date()}
+                            onChange={(event, date) => _handleChangeDateStart(event, date, 1)}
+                            minimumDate={new Date()} value={dateStart ? dateStart : new Date()}
                         />
                 }
                 {
                     !timeStartOpen ? null
                         :
                         <RNDateTimePicker mode="time" value={timeStart}
-                                          minimumDate={new Date()}
-                                          onChange={(event, date) => _handleChangeTimeStart(event, date, 1)}/>
+                            minimumDate={new Date()}
+                            onChange={(event, date) => _handleChangeTimeStart(event, date, 1)} />
                 }
                 <View>
                     <Text style={styles.dateFontSize}>
@@ -233,8 +279,8 @@ const RequestNow = ({route, navigation}: any) => {
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
-                <View style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
-                    <View style={{marginRight: 10}}>
+                <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-between' }}>
+                    <View style={{ marginRight: 10 }}>
                         <Button titleStyle={styles.buttonTitle} containerStyle={styles.buttonSize} onPress={() => setDateEndOpen(true)}>
                             Date End
                         </Button>
@@ -248,15 +294,15 @@ const RequestNow = ({route, navigation}: any) => {
                 </View>
                 {
                     dateEndOpen ? <RNDateTimePicker mode={'date'}
-                                                    minimumDate={new Date()} value={dateEnd ? dateEnd : new Date()}
-                                                    onChange={(event, date) => _handleChangeDateStart(event, date, 2)}
+                        minimumDate={new Date()} value={dateEnd ? dateEnd : new Date()}
+                        onChange={(event, date) => _handleChangeDateStart(event, date, 2)}
                     /> : null
                 }
                 {
                     timeEndOpen ? <RNDateTimePicker mode={'time'}
-                                                    value={timeEnd}
-                                                    minimumDate={new Date()}
-                                                    onChange={(event, date) => _handleChangeTimeStart(event, date, 2)}
+                        value={timeEnd}
+                        minimumDate={new Date()}
+                        onChange={(event, date) => _handleChangeTimeStart(event, date, 2)}
 
                     /> : null
                 }
@@ -297,12 +343,12 @@ const RequestNow = ({route, navigation}: any) => {
             }}>
                 {
                     receipt ? <Text style={{
-                            fontWeight: 'bold',
-                            color: 'green',
-                            fontSize: 20
-                        }}>
-                            {receipt.name}
-                        </Text> :
+                        fontWeight: 'bold',
+                        color: 'green',
+                        fontSize: 20
+                    }}>
+                        {receipt.name}
+                    </Text> :
                         <Text style={{
                             fontWeight: 'bold', color: 'red', fontSize: RFPercentage(2),
                             paddingLeft: 20, paddingRight: 20
@@ -312,27 +358,39 @@ const RequestNow = ({route, navigation}: any) => {
                 }
 
             </View>
-            <View style={{marginBottom: 10, display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
+            <View style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <CheckBox
+                    onPress={() => setDialogTermAndCondition(true)}
+                    checked={agree}
+                    iconType="material-community"
+                    checkedIcon="checkbox-outline"
+                    uncheckedIcon={'checkbox-blank-outline'}
+                    title={'Read Terms and Conditions'}
+                />
+            </View>
+            <View style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Button containerStyle={styles.footerButtonSize} titleStyle={styles.footerButtonFontSize} onPress={_uploadReceipt}>
                     {
                         receipt ? 'Change Receipt' : 'Attached Receipt'
                     }
                 </Button>
                 <Button containerStyle={styles.footerButtonSize}
-                titleStyle={styles.footerButtonFontSize}
-                onPress={_handleRequestBike} color={success}>
+                    disabled={!agree}
+                    titleStyle={styles.footerButtonFontSize}
+                    onPress={_handleRequestBike} color={success}>
                     Rent Now
                 </Button>
             </View>
+
         </ScrollView>
 
-    </ScrollView>
+    </ScrollView >
 }
 const styles = StyleSheet.create({
     buttonTitle: {
         color: "white",
         fontSize: RFPercentage(1.5),
-    }, 
+    },
     buttonSize: {
         width: RFPercentage(10)
     },
@@ -351,12 +409,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     normalTextContainer: {
-         marginBottom: 10,
-         display: 'flex', 
-         paddingLeft: 5, 
-         paddingRight: 5, 
-         flexDirection: 'row', 
-         justifyContent: 'space-between'
+        marginBottom: 10,
+        display: 'flex',
+        paddingLeft: 5,
+        paddingRight: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     }
 });
 
